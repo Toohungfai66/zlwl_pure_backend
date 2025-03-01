@@ -1,0 +1,128 @@
+from .FeiShuAPI import feishuapi
+from .LingXingAPI import lingxingapi
+from datetime import datetime, timedelta  
+import json
+import requests
+
+class bh_stockupplan:
+
+    def __init__(self):
+        pass
+
+    def get_bitable_datas(self, app_token, table_id, filter_condition, page_token='', page_size=20) -> json:
+
+        url = f"https://open.feishu.cn/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records/search?page_size={page_size}&page_token={page_token}&user_id_type=user_id"
+        payload = json.dumps(filter_condition)
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {feishuapi().__getTenantAccessToken__()}'
+        }
+        response = requests.request("POST", url, headers=headers, data=payload)
+        return response.json()
+
+    def FEISHU_FBA_DICT(self) -> dict:
+        delete_data_list_1 = []
+        page_token = ''
+        has_more = True
+        feishu_datas = []
+        while has_more:
+            filter_condition = {
+                "field_names": [
+                    "FNSKU"
+                ],
+                "filter": {
+                    "conjunction": "and",
+                    "conditions": []
+                },
+                "automatic_fields": "false"
+            }
+            response = self.get_bitable_datas(app_token = 'KVZ9bIrm9azOpqseGx3cIkRfn4f', table_id = 'tblzV27KDQw1t96z', page_token = page_token, filter_condition=filter_condition, page_size=500)
+            if response['code'] == 0:
+                feishu_datas.extend(response['data']['items'])
+                has_more = response['data']['has_more']
+                if has_more == False:
+                    break
+                page_token = response['data']['page_token']
+            else:
+                raise Exception(response['msg'])
+        result_dict = {}
+        for feishu_data in feishu_datas:
+            if "FNSKU" not in feishu_data["fields"]:
+                delete_data_list_1.append(feishu_data["record_id"])
+                continue
+            result_dict.update({feishu_data["fields"]["FNSKU"][0]["text"]:feishu_data["record_id"]})
+        return [result_dict,delete_data_list_1]
+
+    def main(self):
+        FeishuReult_all = self.FEISHU_FBA_DICT()
+        FeishuReult = FeishuReult_all[0]
+        delete_data_list_1 = FeishuReult_all[1]
+        name_open_id_dict = {}
+        for _data in ["od-027e3daf1d2d45b1cb46cc4ef3bb4f30"]:
+            department_response = feishuapi().__getSubDepartmentId__(department_id=_data)
+            for _data_1 in department_response["data"]["items"]:
+                departmentuser = feishuapi().__getDepartmentalUsers__(payload_dict={"department_id":_data_1["open_department_id"],"page_size":50})
+                if "items" not in departmentuser["data"]:
+                    continue
+                for _data_2 in departmentuser["data"]["items"]:
+                    name_open_id_dict[_data_2["name"]] = _data_2["open_id"]
+        sid_response = lingxingapi().__AmazonStore__()
+        sid = ""
+        sid_name_dict = {}
+        for _data in sid_response["data"]:
+            sid = sid + str(_data["sid"]) + ","
+            sid_name_dict[_data["sid"]] = _data["name"]
+        sid = sid[:-1]
+        result_response = lingxingapi().__getAmzListing__(sid=sid)
+        update_data_list = []
+        insert_data_list = []
+        delete_data_list = []
+        for _data in result_response:
+            if len(_data["principal_info"]) == 0:
+                principal_name = ""
+            else:
+                principal_name = _data["principal_info"][0]["principal_name"]
+            if principal_name == "余琛瑶":
+                principal_name = "余琛瑶Cali"
+            elif principal_name == "刘捷Leo":
+                principal_name = "刘捷"
+            pay_dict = {
+                "FNSKU":_data["fnsku"],
+                "MSKU":_data["seller_sku"],
+                "SKU":_data["local_sku"],
+                "品名":_data["local_name"],
+                "标题":_data["item_name"],
+                "ASIN":_data["asin"],
+                "父ASIN":_data["parent_asin"],
+                "店铺":sid_name_dict[_data["sid"]],
+                "站点":_data["marketplace"],
+                "负责人":principal_name,
+                "制单日期":datetime.now().strftime("%Y-%m-%d"),
+                "FBA在库+在途":_data["afn_fulfillable_quantity"] + _data["reserved_fc_transfers"] + _data["reserved_fc_processing"] + _data["afn_inbound_shipped_quantity"]
+            }
+            if principal_name in name_open_id_dict:
+                pay_dict["负责人(人员)"] = [{"id":name_open_id_dict[principal_name]}]
+            if _data["fnsku"] in FeishuReult:
+                update_data_list.append({"fields":pay_dict,"record_id":FeishuReult[_data["fnsku"]],})
+            else:
+                insert_data_list.append({"fields":pay_dict})
+            delete_data_list.append(_data["fnsku"])
+
+        for _data in set(list(FeishuReult.keys())) - set(delete_data_list):
+            delete_data_list_1.append(FeishuReult[_data])
+
+        if len(update_data_list) != 0:
+            # 以500为划分，更新回飞书表格，正常的更新
+            for _data in [update_data_list[i:i + 500] for i in range(0, len(update_data_list), 500)]:
+                payload_dict = {"records":_data}
+                feishuapi().__postUpdatesDatas__(app_token = 'KVZ9bIrm9azOpqseGx3cIkRfn4f', table_id = 'tblzV27KDQw1t96z', payload_dict = payload_dict)
+
+        if len(delete_data_list_1) != 0:
+            payload_dict = {"records":delete_data_list_1}
+            feishuapi().__deleteBitableDatas__(app_token = 'KVZ9bIrm9azOpqseGx3cIkRfn4f', table_id = 'tblzV27KDQw1t96z', payload_dict = payload_dict)
+
+        if len(insert_data_list) != 0:
+            # 以500为划分，更新回飞书表格，正常的更新
+            for _data in [insert_data_list[i:i + 500] for i in range(0, len(insert_data_list), 500)]:
+                payload_dict = {"records":_data}
+                feishuapi().__insertBitableDatas__(app_token = 'KVZ9bIrm9azOpqseGx3cIkRfn4f', table_id = 'tblzV27KDQw1t96z', payload_dict = payload_dict)
