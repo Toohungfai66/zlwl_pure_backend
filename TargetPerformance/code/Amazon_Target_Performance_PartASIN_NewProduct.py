@@ -190,11 +190,9 @@ class amazon_target_performance_partASIN_newproduct:
         # 更新数据
         for _data in [update_payload_list[i:i + 500] for i in range(0, len(update_payload_list), 500)]:
             payload_dict = {"records":_data}
-            response = feishuapi().__postUpdatesDatas__(app_token="MGCzb9OGkaujmysIe8cc6WpwnSd", table_id="tbl00A23bwvlJg4x", payload_dict=payload_dict)
-            print(response)
+            feishuapi().__postUpdatesDatas__(app_token="MGCzb9OGkaujmysIe8cc6WpwnSd", table_id="tbl00A23bwvlJg4x", payload_dict=payload_dict)
 
         # 插入数据
         for _data in [insert_payload_list[i:i + 500] for i in range(0, len(insert_payload_list), 500)]:
             payload_dict = {"records":_data}
-            response = feishuapi().__insertBitableDatas__(app_token = 'MGCzb9OGkaujmysIe8cc6WpwnSd', table_id = 'tbl00A23bwvlJg4x', payload_dict = payload_dict)
-            print(response)
+            feishuapi().__insertBitableDatas__(app_token = 'MGCzb9OGkaujmysIe8cc6WpwnSd', table_id = 'tbl00A23bwvlJg4x', payload_dict = payload_dict)

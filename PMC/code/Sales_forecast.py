@@ -161,4 +161,4 @@ class salesforecast:
             # 以500为划分，更新回飞书表格，正常的更新
             for _data in [update_data_list[i:i + 500] for i in range(0, len(update_data_list), 500)]:
                 payload_dict = {"records":_data}
-                print(feishuapi().__postUpdatesDatas__(app_token = 'KVZ9bIrm9azOpqseGx3cIkRfn4f', table_id = 'tblzV27KDQw1t96z', payload_dict = payload_dict))
+                feishuapi().__postUpdatesDatas__(app_token = 'KVZ9bIrm9azOpqseGx3cIkRfn4f', table_id = 'tblzV27KDQw1t96z', payload_dict = payload_dict)

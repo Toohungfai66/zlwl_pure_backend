@@ -42,21 +42,16 @@ class pmc:
         for _data in self.data:
             if _data == "亚马逊PMC备货计划":
                 self.record_id = self.data[_data]
-        print("1")
-        bh_stockupplan().main()
-        print("2")
-        bh_procurement().main()
-        print("3")
-        bh_bd().main()
-        print("4")
-        bh_productperformance().main()
-        print("5")
-        salesforecast().main()
-        print("6")
-        bh_salesstatistics().main()
-        print("7")
-        self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
-        # self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})
+        try:
+            bh_stockupplan().main()
+            bh_procurement().main()
+            bh_bd().main()
+            bh_productperformance().main()
+            salesforecast().main()
+            bh_salesstatistics().main()
+            self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
+        except:
+            self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})
         feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = self.payload_dict)
 
     def __AImodel__(self):

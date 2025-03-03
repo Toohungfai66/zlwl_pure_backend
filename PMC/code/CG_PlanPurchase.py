@@ -110,15 +110,12 @@ class cg_planpurchase:
             # 以500为划分，更新回飞书表格，正常的更新
             for _data in [insert_data_list[i:i + 500] for i in range(0, len(insert_data_list), 500)]:
                 payload_dict = {"records":_data}
-                response = feishuapi().__insertBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblMT8KYNHF28z5Z', payload_dict = payload_dict)
-                print(response)
+                feishuapi().__insertBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblMT8KYNHF28z5Z', payload_dict = payload_dict)
         if len(update_data_list) != 0:
             # 以500为划分，更新回飞书表格，正常的更新
             for _data in [update_data_list[i:i + 500] for i in range(0, len(update_data_list), 500)]:
                 payload_dict = {"records":_data}
-                response = feishuapi().__postUpdatesDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblMT8KYNHF28z5Z', payload_dict = payload_dict)
-                print(response)
+                feishuapi().__postUpdatesDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblMT8KYNHF28z5Z', payload_dict = payload_dict)
         if len(delete_data_list) != 0:
             payload_dict = {"records":delete_data_list}
-            response = feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblMT8KYNHF28z5Z', payload_dict = payload_dict)
-            print(response)
+            feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblMT8KYNHF28z5Z', payload_dict = payload_dict)

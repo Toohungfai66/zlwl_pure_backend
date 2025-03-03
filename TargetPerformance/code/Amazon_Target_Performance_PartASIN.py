@@ -346,8 +346,7 @@ class amazon_target_performance_partASIN:
             # 上传数据
             while True:
                 try:
-                    response = feishuapi().__postUpdatesDatas__(app_token = 'XHPsbDoxhasv4fswQ9hckwLmnbc', table_id = 'tbl5RlIhqMzC8KkC', payload_dict = payload_dict)
-                    print(response)
+                    feishuapi().__postUpdatesDatas__(app_token = 'XHPsbDoxhasv4fswQ9hckwLmnbc', table_id = 'tbl5RlIhqMzC8KkC', payload_dict = payload_dict)
                     break
                 except:
                     continue
@@ -405,8 +404,7 @@ class amazon_target_performance_partASIN:
             # 上传数据
             while True:
                 try:
-                    response = feishuapi().__insertBitableDatas__(app_token="XHPsbDoxhasv4fswQ9hckwLmnbc", table_id="tbl5RlIhqMzC8KkC", payload_dict=payload_dict)
-                    print(response)
+                    feishuapi().__insertBitableDatas__(app_token="XHPsbDoxhasv4fswQ9hckwLmnbc", table_id="tbl5RlIhqMzC8KkC", payload_dict=payload_dict)
                     break
                 except:
                     continue
@@ -422,8 +420,7 @@ class amazon_target_performance_partASIN:
             # 上传数据
             while True:
                 try:
-                    response = feishuapi().__postUpdatesDatas__(app_token = 'XHPsbDoxhasv4fswQ9hckwLmnbc', table_id = 'tbl5RlIhqMzC8KkC', payload_dict = payload_dict)
-                    print(response)
+                    feishuapi().__postUpdatesDatas__(app_token = 'XHPsbDoxhasv4fswQ9hckwLmnbc', table_id = 'tbl5RlIhqMzC8KkC', payload_dict = payload_dict)
                     break
                 except:
                     continue

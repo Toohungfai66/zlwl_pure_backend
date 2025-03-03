@@ -105,8 +105,7 @@ class fba:
                 # 上传数据
                 while True:
                     try:
-                        response = feishuapi().__postUpdatesDatas__(app_token = 'MGCzb9OGkaujmysIe8cc6WpwnSd', table_id = 'tbluZil11GgO1ytM', payload_dict = payload_dict)
-                        print(response)
+                        feishuapi().__postUpdatesDatas__(app_token = 'MGCzb9OGkaujmysIe8cc6WpwnSd', table_id = 'tbluZil11GgO1ytM', payload_dict = payload_dict)
                         break
                     except:
                         continue
@@ -117,8 +116,7 @@ class fba:
                 # 上传数据
                 while True:
                     try:
-                        response = feishuapi().__insertBitableDatas__(app_token = 'MGCzb9OGkaujmysIe8cc6WpwnSd', table_id = 'tbluZil11GgO1ytM', payload_dict = payload_dict)
-                        print(response)
+                        feishuapi().__insertBitableDatas__(app_token = 'MGCzb9OGkaujmysIe8cc6WpwnSd', table_id = 'tbluZil11GgO1ytM', payload_dict = payload_dict)
                         break
                     except:
                         continue

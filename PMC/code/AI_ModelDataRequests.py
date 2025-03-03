@@ -64,7 +64,6 @@ class ai_modeldatarequests:
             try:
                 df = pd.read_excel(f"C:\\Project\\Zlwl\\PMC\\static\\msku_files\\{_data}.xlsx")
             except:
-                print(_data)
                 continue
             for _data_1 in all_data[_data]:
                 new_row = [_data_1["日期"],_data_1["销量"],_data_1["大类排名"],_data_1["广告花费"]]
