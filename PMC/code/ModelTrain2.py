@@ -27,10 +27,10 @@ class modeltrain:
         return cv_scores.mean()
     
     def main(self):
-        for _data in os.listdir("C:\\Project\\Zlwl\\PMC\\static\\msku_files"):
-            if _data[:-5] + ".pkl" in os.listdir("C:\Project\亚马逊PMC模型自主学习\msku_fiels_model"):
+        for _data in os.listdir("C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_files"):
+            if _data[:-5] + ".pkl" in os.listdir("C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_fiels_model"):
                 continue
-            df = pd.read_excel(f"C:\\Project\\Zlwl\\PMC\\static\\msku_files\\{_data}")
+            df = pd.read_excel(f"C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_files\\{_data}")
             df['日期'] = pd.to_datetime(df['日期'])
             df['年'] = df['日期'].dt.year
             df['月'] = df['日期'].dt.month
@@ -92,4 +92,4 @@ class modeltrain:
             best_iteration = model.best_iteration
             # 使用最优迭代次数重新训练模型
             model = xgb.train(params, dtrain, num_boost_round=best_iteration)
-            joblib.dump(model, f'C:\\Project\\Zlwl\\PMC\\static\\msku_fiels_model\\{_data[:-5]}.pkl')
+            joblib.dump(model, f'C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_fiels_model\\{_data[:-5]}.pkl')

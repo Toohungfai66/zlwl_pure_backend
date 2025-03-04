@@ -62,10 +62,10 @@ class ai_modeldatarequests:
         all_data = self.get_data(start_data="2025-02-18",end_data="2025-02-28")
         for _data in all_data:
             try:
-                df = pd.read_excel(f"C:\\Project\\Zlwl\\PMC\\static\\msku_files\\{_data}.xlsx")
+                df = pd.read_excel(f"C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_files\\{_data}.xlsx")
             except:
                 continue
             for _data_1 in all_data[_data]:
                 new_row = [_data_1["日期"],_data_1["销量"],_data_1["大类排名"],_data_1["广告花费"]]
                 df.loc[len(df)] = new_row
-            df.to_excel(f"C:\\Project\\Zlwl\\PMC\\static\\msku_files\\{_data}.xlsx",index=False)
+            df.to_excel(f"C:\\Project\\zlwl_pure_backend\\PMC\static\\msku_files\\{_data}.xlsx",index=False)

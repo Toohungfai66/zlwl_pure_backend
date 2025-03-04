@@ -58,10 +58,8 @@ class pmc:
         for _data in self.data:
             if _data == "AI自主学习模型":
                 self.record_id = self.data[_data]
-        try:
-            ai_modeldatarequests().main()
-            modeltrain().main()
-            self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
-        except:
-            self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})
+        ai_modeldatarequests().main()
+        modeltrain().main()
+        self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
+            # self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})
         feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = self.payload_dict)
