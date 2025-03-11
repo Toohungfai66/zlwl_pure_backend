@@ -110,7 +110,7 @@ class bh_procurement:
 
         if len(delete_data_list_1) != 0:
             payload_dict = {"records":delete_data_list_1}
-            feishuapi().__deleteBitableDatas__(app_token = 'MGCzb9OGkaujmysIe8cc6WpwnSd', table_id = 'tblRoQteNoNmylwt', payload_dict = payload_dict)
+            feishuapi().__deleteBitableDatas__(app_token = 'KVZ9bIrm9azOpqseGx3cIkRfn4f', table_id = 'tblRoQteNoNmylwt', payload_dict = payload_dict)
 
         if len(insert_data_list) != 0:
             # 以500为划分，更新回飞书表格，正常的更新

@@ -2,7 +2,7 @@ from .CG_InventoryDetails import cg_inventorydetails
 from .CG_OrderPurchase import cg_orderPurchase
 from .CG_PlanPurchase import cg_planpurchase
 from .CG_SupplierLayout import cg_supplierlayout
-from .BH_BD import bh_bd
+from .Warehouse import warehouse
 from .BH_Procurement import bh_procurement
 from .BH_ProductPerformance import bh_productperformance
 from .BH_SalesStatistics import bh_salesstatistics
@@ -45,7 +45,6 @@ class pmc:
         try:
             bh_stockupplan().main()
             bh_procurement().main()
-            bh_bd().main()
             bh_productperformance().main()
             salesforecast().main()
             bh_salesstatistics().main()
@@ -58,8 +57,20 @@ class pmc:
         for _data in self.data:
             if _data == "AI自主学习模型":
                 self.record_id = self.data[_data]
-        ai_modeldatarequests().main()
-        modeltrain().main()
-        self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
-            # self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})
+        try:
+            ai_modeldatarequests().main()
+            modeltrain().main()
+            self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
+        except:
+            self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})
         feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = self.payload_dict)
+
+    def __Warehouse__(self):
+        for _data in self.data:
+            if _data == "领星库存明细":
+                self.record_id = self.data[_data]
+        try:
+            warehouse().main()
+            self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
+        except:
+            feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = self.payload_dict)

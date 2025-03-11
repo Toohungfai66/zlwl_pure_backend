@@ -79,7 +79,7 @@ class amazon_target_performance_partASIN_newproduct:
             result_dict.update({feishu_data["fields"]["父ASIN"][0]["text"]+","+feishu_data["fields"]["国家"][0]["text"]:feishu_data["record_id"]})
         return result_dict
     def main(self):
-        date_str = datetime.now().strftime("%Y-%m-%d")
+        date_str = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
         # 获取当天位于当周的的起始日期
         Lx_datetime_weeks = self.get_dates_since_last_sunday(str_date = date_str)
         dates_last_week = self.get_dates_last_week(str_date = date_str)  
@@ -155,29 +155,29 @@ class amazon_target_performance_partASIN_newproduct:
             fields_dict = {
                 "父ASIN":str(_data).split(",")[0],
                 "国家":str(_data).split(",")[1],
-                "毛利润(实现)":LingxingProfitResult[_data]["grossProfit"], 
-                "销量(实现)":LingxingProfitResult[_data]["totalSalesQuantity"],
-                "收入(实现)":LingxingProfitResult[_data]["SR"],
+                "毛利润(周度实现)":LingxingProfitResult[_data]["grossProfit"], 
+                "销量(周度实现)":LingxingProfitResult[_data]["totalSalesQuantity"],
+                "收入(周度实现)":LingxingProfitResult[_data]["SR"],
             }
             try:
                 fields_dict.update({
-                    "大类排名(实现)":Lingxingproductperformance[_data]["cate_rank"],
-                    "小类排名(实现)":Lingxingproductperformance[_data]["small_cate_rank"],
-                    "CVR(实现)":Lingxingproductperformance[_data]["cvr"], 
-                    "CPA(实现)":Lingxingproductperformance[_data]["cpo"], 
-                    "ACOS(实现)":Lingxingproductperformance[_data]["acos"],
-                    "TACOS(实现)":Lingxingproductperformance[_data]["acoas"],
+                    "大类排名(周度实现)":Lingxingproductperformance[_data]["cate_rank"],
+                    "小类排名(周度实现)":Lingxingproductperformance[_data]["small_cate_rank"],
+                    "CVR(周度实现)":Lingxingproductperformance[_data]["cvr"], 
+                    "CPA(周度实现)":Lingxingproductperformance[_data]["cpo"], 
+                    "ACOS(周度实现)":Lingxingproductperformance[_data]["acos"],
+                    "TACOS(周度实现)":Lingxingproductperformance[_data]["acoas"],
                     "广告订单量":Lingxingproductperformance[_data]["ad_order_quantity"],
                     "自然订单量":Lingxingproductperformance[_data]["order_items"] - Lingxingproductperformance[_data]["ad_order_quantity"]
                     })
             except:
                 fields_dict.update({
-                    "大类排名(实现)":0,
-                    "小类排名(实现)":0,
-                    "CVR(实现)":0, 
-                    "CPA(实现)":0, 
-                    "ACOS(实现)":0,
-                    "TACOS(实现)":0,
+                    "大类排名(周度实现)":0,
+                    "小类排名(周度实现)":0,
+                    "CVR(周度实现)":0, 
+                    "CPA(周度实现)":0, 
+                    "ACOS(周度实现)":0,
+                    "TACOS(周度实现)":0,
                     "广告订单量":0,
                     "自然订单量":0,
                     })

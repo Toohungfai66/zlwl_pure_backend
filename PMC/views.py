@@ -34,3 +34,11 @@ def pmc_aimodel(request):
     thread.start()
     # 主函数继续执行，无需等待线程执行完毕
     return HttpResponse("请等待几分钟!")
+
+@csrf_exempt
+def pmc_warehouse(request):
+    thread = threading.Thread(target=pmc().__Warehouse__)
+    # 启动线程
+    thread.start()
+    # 主函数继续执行，无需等待线程执行完毕
+    return HttpResponse("请等待几分钟!")

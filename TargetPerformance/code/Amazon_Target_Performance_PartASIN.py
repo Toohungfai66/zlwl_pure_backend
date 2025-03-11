@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 import datetime as dt
 from .FeiShuAPI import feishuapi
 from .LingXingAPI import lingxingapi
-from .Amazon_Target_Performance_PartASIN_NewProduct import amazon_target_performance_partASIN_newproduct
 class amazon_target_performance_partASIN:
     def __init__(self) -> None:
         pass
@@ -159,7 +158,7 @@ class amazon_target_performance_partASIN:
     def main(self):
         # 获取日期映射字典
         datetime_dict = self.datetime_dict_h()
-        date_str = datetime.now().strftime("%Y-%m-%d")
+        date_str = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
         # 获取当天位于当周的的起始日期
         Lx_datetime_weeks = self.get_dates_since_last_sunday(str_date = date_str)
         start_yesterday_str = Lx_datetime_weeks[0].strftime('%Y-%m-%d')
@@ -424,4 +423,3 @@ class amazon_target_performance_partASIN:
                     break
                 except:
                     continue
-        amazon_target_performance_partASIN_newproduct().main()
