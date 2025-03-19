@@ -41,7 +41,7 @@ class project_id_update_class:
                 self.payload_dict.update({"records":[{"record_id":feishu_data["record_id"],"fields":{"程序运行状态":"程序运行成功"}}]})
                 feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = self.payload_dict)
         # 定义要保存的 JSON 文件的路径
-        file_path = "C:\Project\Zlwl\Zlwl\static\project_id.json"
+        file_path = "C:\Project\zlwl_pure_backend\Zlwl\static\project_id.json"
         # 以写入模式打开文件
         with open(file_path, 'w', encoding='utf-8') as json_file:
             # 使用 json.dump() 方法将字典写入文件

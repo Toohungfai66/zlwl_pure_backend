@@ -160,27 +160,37 @@ class amazon_target_performance_partASIN_newproduct:
                 "收入(周度实现)":LingxingProfitResult[_data]["SR"],
             }
             try:
-                fields_dict.update({
-                    "大类排名(周度实现)":Lingxingproductperformance[_data]["cate_rank"],
-                    "小类排名(周度实现)":Lingxingproductperformance[_data]["small_cate_rank"],
-                    "CVR(周度实现)":Lingxingproductperformance[_data]["cvr"], 
-                    "CPA(周度实现)":Lingxingproductperformance[_data]["cpo"], 
-                    "ACOS(周度实现)":Lingxingproductperformance[_data]["acos"],
-                    "TACOS(周度实现)":Lingxingproductperformance[_data]["acoas"],
-                    "广告订单量":Lingxingproductperformance[_data]["ad_order_quantity"],
-                    "自然订单量":Lingxingproductperformance[_data]["order_items"] - Lingxingproductperformance[_data]["ad_order_quantity"]
-                    })
+                fields_dict["大类排名(周度实现)"] = Lingxingproductperformance[_data]["cate_rank"]
             except:
-                fields_dict.update({
-                    "大类排名(周度实现)":0,
-                    "小类排名(周度实现)":0,
-                    "CVR(周度实现)":0, 
-                    "CPA(周度实现)":0, 
-                    "ACOS(周度实现)":0,
-                    "TACOS(周度实现)":0,
-                    "广告订单量":0,
-                    "自然订单量":0,
-                    })
+                fields_dict["大类排名(周度实现)"] = 0
+            try:
+                fields_dict["小类排名(周度实现)"] = Lingxingproductperformance[_data]["small_cate_rank"]
+            except:
+                fields_dict["小类排名(周度实现)"] = 0
+            try:
+                fields_dict["CVR(周度实现)"] = Lingxingproductperformance[_data]["cvr"]
+            except:
+                fields_dict["CVR(周度实现)"] = 0
+            try:
+                fields_dict["CPA(周度实现)"] = Lingxingproductperformance[_data]["cpo"]
+            except:
+                fields_dict["CVR(周度实现)"] = 0
+            try:
+                fields_dict["ACOS(周度实现)"] = Lingxingproductperformance[_data]["acos"]
+            except:
+                fields_dict["ACOS(周度实现)"] = 0
+            try:
+                fields_dict["TACOS(周度实现)"] = Lingxingproductperformance[_data]["acoas"]
+            except:
+                fields_dict["TACOS(周度实现)"] = 0
+            try:
+                fields_dict["广告订单量"] = Lingxingproductperformance[_data]["ad_order_quantity"]
+            except:
+                fields_dict["广告订单量"] = 0
+            try:
+                fields_dict["自然订单量"] = Lingxingproductperformance[_data]["order_items"] - Lingxingproductperformance[_data]["ad_order_quantity"]
+            except:
+                fields_dict["自然订单量"] = 0
             if _data in FEISHU_LIRUN_DICT_DICT:
                 update_payload_list.append({"record_id": FEISHU_LIRUN_DICT_DICT[_data], "fields": fields_dict})
             else:
