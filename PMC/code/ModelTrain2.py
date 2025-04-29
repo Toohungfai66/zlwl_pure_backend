@@ -6,8 +6,14 @@ from bayes_opt import BayesianOptimization
 from sklearn.model_selection import cross_val_score
 from functools import partial
 import joblib, re, os
+import warnings
+from sklearn.exceptions import UndefinedMetricWarning
+from datetime import datetime, timedelta
 
 class modeltrain:
+    def __init__(self):
+        warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
+
     def xgb_evaluate(self, eta, max_depth, min_child_weight, gamma, subsample, colsample_bytree, colsample_bylevel, reg_lambda, alpha, X_train, X_test, y_train, y_test):
         params = {
             'objective':'reg:tweedie',
@@ -25,12 +31,28 @@ class modeltrain:
         # 使用交叉验证评估模型
         cv_scores = cross_val_score(model, X_train, y_train, cv=5, scoring='r2')
         return cv_scores.mean()
-    
+
+    def is_modified_today(self,filepath):
+        # 获取文件修改时间的时间戳
+        modify_timestamp = os.path.getmtime(filepath)
+        # 转换为datetime对象
+        modify_date = datetime.fromtimestamp(modify_timestamp).date()
+        # 获取当前日期
+        today = datetime.now().date()
+        # 比较日期
+        return modify_date == today
+
     def main(self):
         for _data in os.listdir("C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_files"):
-            if _data[:-5] + ".pkl" in os.listdir("C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_fiels_model"):
+            # if _data[:-5] + ".pkl" in os.listdir("C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_fiels_model"):
+            #     continue
+            try:
+                if self.is_modified_today(f"C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_files\\{_data}"):
+                    continue
+            except:
                 continue
             df = pd.read_excel(f"C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_files\\{_data}")
+            df = df[['日期','销量']]
             df['日期'] = pd.to_datetime(df['日期'])
             df['年'] = df['日期'].dt.year
             df['月'] = df['日期'].dt.month
@@ -45,8 +67,8 @@ class modeltrain:
             # 对季节进行独热编码
             df = pd.get_dummies(df, columns=['季节'])
 
-            df['大类排名'] = df['大类排名'].apply(lambda x : int(re.findall("\d+", str(x))[0]) if re.findall("\d+", str(x)) else 0)
-            df['广告花费'] = -df['广告花费']
+            # df['大类排名'] = df['大类排名'].apply(lambda x : int(re.findall("\d+", str(x))[0]) if re.findall("\d+", str(x)) else 0)
+            # df['广告花费'] = -df['广告花费']
 
             # 1. 生成模拟回归数据集
             X = df.drop(columns=['日期','销量'])
@@ -69,13 +91,18 @@ class modeltrain:
                 'reg_lambda': (5, 50),  # 扩大 reg_lambda 范围
                 'alpha': (5, 50)  # 扩大 alpha 范围
             }
-            xgb_eval_partial = partial(self.xgb_evaluate, X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test)
-            optimizer = BayesianOptimization(
-                f=xgb_eval_partial,
-                pbounds=pbounds,
-                random_state=42
-            )
-            optimizer.maximize(init_points=10, n_iter=20)
+            try:
+                xgb_eval_partial = partial(self.xgb_evaluate, X_train=X_train, X_test=X_test, y_train=y_train, y_test=y_test)
+                print(_data)
+
+                optimizer = BayesianOptimization(
+                    f=xgb_eval_partial,
+                    pbounds=pbounds,
+                    random_state=42
+                )
+                optimizer.maximize(init_points=10, n_iter=20)
+            except:
+                continue
 
             # 3. 将数据转换为XGBoost所需的DMatrix格式
             dtrain = xgb.DMatrix(X_train, label=y_train)

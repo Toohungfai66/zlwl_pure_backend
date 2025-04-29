@@ -1,7 +1,6 @@
 from .Amazon_Target_Performance_PartASIN import amazon_target_performance_partASIN
 from .Amazon_Target_Performance_PartASIN_NewProduct import amazon_target_performance_partASIN_newproduct
 from .Clean_up_regularly import clean_up_regularly
-from .FBA import fba
 from .Amazon_Target_Performance_ASIN import amazon_target_performance_asin
 from .Waller_Target_Performance import waller_target_performance
 from .WFS import wfs
@@ -26,7 +25,6 @@ class target_Performance:
         try:
             amazon_target_performance_partASIN().main()
             amazon_target_performance_partASIN_newproduct().main()
-            fba().main()
             clean_up_regularly().main()
             self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
         except:

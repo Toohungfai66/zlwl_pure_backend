@@ -153,7 +153,6 @@ class lingxingapi():
     # 产品表现
     def __ProductPerformance__(self, start_date : str, end_date : str) -> json:
         result_response = []
-        offset = 0
         sid = []
         sid_response = self.__AmazonStore__()
         for _data in sid_response["data"]:
@@ -163,7 +162,7 @@ class lingxingapi():
                 "app_key":self.appId,
                 "access_token":self.__getAccessToken__(),
                 "timestamp":int(time.time()),
-                "offset": offset,
+                "offset": 0,
                 "length": 10000,
                 "sort_field":"volume",
                 "sort_type":"desc",

@@ -7,5 +7,6 @@ urlpatterns = [
     path('pmc_cgdata/', views.pmc_cgdata, name='pmc_cgdata'),
     path('pmc_bhdata/', views.pmc_bhdata, name='pmc_bhdata'),
     path('pmc_aimodel/', views.pmc_aimodel, name='pmc_aimodel'),
-    path('pmc_warehouse/', views.pmc_warehouse, name='pmc_warehouse')
+    path('pmc_warehouse/', views.pmc_warehouse, name='pmc_warehouse'),
+    path('cg_orderpurchase/', views.cg_orderpurchase, name='cg_orderpurchase')
 ]

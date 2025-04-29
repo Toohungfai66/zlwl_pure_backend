@@ -25,7 +25,7 @@ class cg_supplierlayout:
         while has_more:
             filter_condition = {
                 "field_names": [
-                    "计划编号",
+                    "ID",
                 ],
                 "filter": {
                     "conjunction": "and",
@@ -44,38 +44,33 @@ class cg_supplierlayout:
                 raise Exception(response['msg'])
         result_dict = {}
         for feishu_data in feishu_datas:
-            result_dict.update({feishu_data["fields"]["计划编号"][0]["text"]:feishu_data["record_id"]})
+            result_dict.update({feishu_data["fields"]["ID"]:feishu_data["record_id"]})
         return result_dict
 
     def main(self):
-        FeishuReult = self.FEISHU_FBA_DICT(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblMT8KYNHF28z5Z')
-        FeishuReult_LX = self.FEISHU_FBA_DICT(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblGK2pKaWMnxzkO')
-        FeishuReult_HYH = self.FEISHU_FBA_DICT(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblWf3pdueKsG7rx')
+        FeishuReult = self.FEISHU_FBA_DICT(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblsiC3jAdIqbbfG')
+        FeishuReult_ALL = self.FEISHU_FBA_DICT(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblGK2pKaWMnxzkO')
 
         insert_data_list = []
         for _data in FeishuReult:
-            if _data not in FeishuReult_LX:
+            if _data not in FeishuReult_ALL:
                 insert_data_list.append({
-                    "fields":{"计划编号":_data,}
+                    "fields":{"ID":_data}
                 })
             try:
-                del FeishuReult_LX[_data]
-                del FeishuReult_HYH[_data]
+                del FeishuReult_ALL[_data]
+                del FeishuReult_ALL[_data]
             except:
                 continue
 
-        delete_data_list_LX = list(FeishuReult_LX.values())
-        delete_data_list_HYH = list(FeishuReult_HYH.values())
+        delete_data_list_LX = list(FeishuReult_ALL.values())
 
         if len(insert_data_list) != 0:
             # 以500为划分，更新回飞书表格，正常的更新
             for _data in [insert_data_list[i:i + 500] for i in range(0, len(insert_data_list), 500)]:
                 payload_dict = {"records":_data}
                 feishuapi().__insertBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblGK2pKaWMnxzkO', payload_dict = payload_dict)
-                feishuapi().__insertBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblWf3pdueKsG7rx', payload_dict = payload_dict)
         if len(delete_data_list_LX) != 0:
-            payload_dict = {"records":delete_data_list_LX}
-            feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblGK2pKaWMnxzkO', payload_dict = payload_dict)
-        if len(delete_data_list_HYH) != 0:
-            payload_dict = {"records":delete_data_list_HYH}
-            feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblWf3pdueKsG7rx', payload_dict = payload_dict)
+            for _data in [delete_data_list_LX[i:i + 500] for i in range(0, len(delete_data_list_LX), 500)]:
+                payload_dict = {"records":_data}
+                feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblGK2pKaWMnxzkO', payload_dict = payload_dict)

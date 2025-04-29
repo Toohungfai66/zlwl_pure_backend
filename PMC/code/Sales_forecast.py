@@ -42,10 +42,10 @@ class salesforecast:
                     "父ASIN",
                     "ASIN",
                     "MSKU",
-                    "当前广告花费(前七天)",
-                    "当前大类排名(前七天)",
-                    "预计广告花费(周)",
-                    "预计大类排名(周)"
+                    "昨日广告费",
+                    "大类排名",
+                    "预计广告花费",
+                    "预计大类排名"
                 ],
                 "filter": {
                     "conjunction": "and",
@@ -53,7 +53,7 @@ class salesforecast:
                 },
                 "automatic_fields": "false"
             }
-            response = self.get_bitable_datas(app_token = 'KVZ9bIrm9azOpqseGx3cIkRfn4f', table_id = 'tblzV27KDQw1t96z', page_token = page_token, filter_condition=filter_condition, page_size=500)
+            response = self.get_bitable_datas(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tbl4cEZVqzSo83zl', page_token = page_token, filter_condition=filter_condition, page_size=500)
             if response['code'] == 0:
                 feishu_datas.extend(response['data']['items'])
                 has_more = response['data']['has_more']
@@ -64,18 +64,18 @@ class salesforecast:
                 raise Exception(response['msg'])
         result_dict = {}
         for feishu_data in feishu_datas:
-            if "预计广告花费(周)" in feishu_data["fields"]:
-                GGHF = feishu_data["fields"]["预计广告花费(周)"]
+            if "预计广告花费" in feishu_data["fields"]:
+                GGHF = feishu_data["fields"]["预计广告花费"]
             else:
                 try:
                     GGHF = feishu_data["fields"]["当前广告花费(前七天)"]
                 except:
                     GGHF = 0
-            if "预计大类排名(周)" in feishu_data["fields"]:
-                DDPM = feishu_data["fields"]["预计大类排名(周)"]
+            if "预计大类排名" in feishu_data["fields"]:
+                DDPM = feishu_data["fields"]["预计大类排名"]
             else:
                 try:
-                    DDPM = feishu_data["fields"]["当前大类排名(前七天)"]
+                    DDPM = feishu_data["fields"]["大类排名"]
                 except:
                     DDPM = 0
             try:
@@ -97,20 +97,23 @@ class salesforecast:
         feishudata = self.FEISHU_FBA_DICT()
         for _data in feishudata:
             pkl_name = feishudata[_data][0] + "_" + feishudata[_data][1] + "_" + feishudata[_data][2]
+            pkl_name = str(pkl_name).replace('/', 'or')
             if pkl_name + ".pkl" not in os.listdir("C:\\Project\\Zlwl\\PMC\\static\\msku_fiels_model"):
                 continue
             # 给定的日期
             input_date = feishudata[_data][5]
             date_range_7_days = self.get_date_range(input_date, 7)
-            seventy_five_days_later = (datetime.strptime(input_date, '%Y-%m-%d') + timedelta(days=75)).strftime('%Y-%m-%d')
-            date_range_75_and_7_days = self.get_date_range(seventy_five_days_later, 7)
+            seventy_five_days_later = (datetime.strptime(input_date, '%Y-%m-%d') + timedelta(days=45)).strftime('%Y-%m-%d')
+            date_range_45_and_7_days = self.get_date_range(seventy_five_days_later, 7)
 
             ifnum = 0
             fields = {}
-            for _date in [date_range_7_days,date_range_75_and_7_days]:
-                df = pd.DataFrame(columns=["日期","大类排名","广告花费"])
+            for _date in [date_range_7_days,date_range_45_and_7_days]:
+                # df = pd.DataFrame(columns=["日期","大类排名","广告花费"])
+                df = pd.DataFrame(columns=["日期"])
                 for _date_1 in _date:
-                    df.loc[len(df)] = [_date_1,feishudata[_data][4],feishudata[_data][3]]
+                    # df.loc[len(df)] = [_date_1,feishudata[_data][4],feishudata[_data][3]]
+                    df.loc[len(df)] = [_date_1]
                 df['日期'] = pd.to_datetime(df['日期'])
                 df['年'] = df['日期'].dt.year
                 df['月'] = df['日期'].dt.month
@@ -124,9 +127,10 @@ class salesforecast:
 
                 # 对季节进行独热编码
                 df = pd.get_dummies(df, columns=['季节'])
-
-                df['大类排名'] = df['大类排名'].apply(lambda x : int(re.findall("\d+", str(x))[0]) if re.findall("\d+", str(x)) else 0)
-                df['广告花费'] = -df['广告花费'] / 7
+                
+                # df['大类排名'] = df['大类排名'].apply(lambda x : int(re.findall("\d+", str(x))[0]) if re.findall("\d+", str(x)) else 0)
+                # df['广告花费'] = -df['广告花费'] / 7
+                
                 # 预测 C:\Project\Zlwl\PMC\static\msku_fiels_model
                 loaded_model = joblib.load(f'C:\\Project\\Zlwl\\PMC\\static\\msku_fiels_model\\{pkl_name}.pkl')
                 # 提取特征列
@@ -149,8 +153,8 @@ class salesforecast:
                     })
                 else:
                     fields.update({
-                        "预测75天后(一周)销量":joined_string,
-                        "预测75天后(一周统计)销量":math.ceil(sum_sala)
+                        "预测45天后(一周)销量":joined_string,
+                        "预测45天后(一周统计)销量":math.ceil(sum_sala)
                     })
                 ifnum += 1
             update_data_list.append({
@@ -161,4 +165,4 @@ class salesforecast:
             # 以500为划分，更新回飞书表格，正常的更新
             for _data in [update_data_list[i:i + 500] for i in range(0, len(update_data_list), 500)]:
                 payload_dict = {"records":_data}
-                feishuapi().__postUpdatesDatas__(app_token = 'KVZ9bIrm9azOpqseGx3cIkRfn4f', table_id = 'tblzV27KDQw1t96z', payload_dict = payload_dict)
+                feishuapi().__postUpdatesDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tbl4cEZVqzSo83zl', payload_dict = payload_dict)

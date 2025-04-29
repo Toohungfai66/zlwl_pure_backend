@@ -81,10 +81,7 @@ class bh_productperformance:
                     brands = brands + _data_1 + ","
             Lingxingproductdict = {
                     _data["price_list"][0]["seller_sku"] + "|" + _data["price_list"][0]["seller_name"]:{
-                        "cate_rank":_data["cate_rank"], # 大类排名
                         "spend":float(_data["spend"]), # 广告花费
-                        "categories":categories,
-                        "brands":brands
                     }
                 }
             if _data["price_list"][0]["seller_sku"] + "|" + _data["price_list"][0]["seller_name"] not in Lingxingproductperformance:
@@ -100,17 +97,13 @@ class bh_productperformance:
             if _data in Lingxingproductperformance:
                 fields_dict.update({
                     "fields": {
-                        "分类":Lingxingproductperformance[_data]["categories"],
-                        "品牌":Lingxingproductperformance[_data]["brands"],
-                        "当前广告花费(前七天)":Lingxingproductperformance[_data]["spend"],
-                        "当前大类排名(前七天)":Lingxingproductperformance[_data]["cate_rank"]
+                        "当前广告花费(前七天)":Lingxingproductperformance[_data]["spend"]
                     }
                     })
             else:
                 fields_dict.update({
                     "fields": {
-                        "当前广告花费(前七天)":0,
-                        "当前大类排名(前七天)":0
+                        "当前广告花费(前七天)":0
                     }
                     })
             payload_original.append(fields_dict)

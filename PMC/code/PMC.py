@@ -1,9 +1,7 @@
-from .CG_InventoryDetails import cg_inventorydetails
 from .CG_OrderPurchase import cg_orderPurchase
 from .CG_PlanPurchase import cg_planpurchase
 from .CG_SupplierLayout import cg_supplierlayout
 from .Warehouse import warehouse
-from .BH_Procurement import bh_procurement
 from .BH_ProductPerformance import bh_productperformance
 from .BH_SalesStatistics import bh_salesstatistics
 from .BH_Stockupplan import bh_stockupplan
@@ -11,12 +9,15 @@ from .Sales_forecast import salesforecast
 from .AI_ModelDataRequests import ai_modeldatarequests
 from .ModelTrain2 import modeltrain
 from .FeiShuAPI import feishuapi
+from .BH_Getlisting import getlisting
+from .CG_AIpredit import cg_aipredit
+from .CG_SX import cg_sx
 import json
 class pmc:
     def __init__(self):
         self.app_token = "Krz3bhiFoaw8Ans8i1YchYcfnDc"
         self.table_id = "tblKshONitaIxTbI"
-        file_path = "C:\Project\Zlwl\Zlwl\static\project_id.json"
+        file_path = "C:\Project\zlwl_pure_backend\Zlwl\static\project_id.json"
         self.payload_dict = {}
         self.record_id = ""
         # 以只读模式打开文件，并指定编码为 utf-8
@@ -31,11 +32,23 @@ class pmc:
         try:
             cg_planpurchase().main()
             cg_supplierlayout().main()
-            cg_inventorydetails().main()
             cg_orderPurchase().main()
+            cg_sx().main()
             self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
         except:
             self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})
+        feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = self.payload_dict)
+
+    def __CG_orderPurchase__(self):
+        for _data in self.data:
+            if _data == "亚马逊PMC采购计划-采购单":
+                self.record_id = self.data[_data]
+        # try:
+            # cg_orderPurchase().main()
+        cg_sx().main()
+        self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
+        # except:
+        #     self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})
         feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = self.payload_dict)
 
     def __BHdata__(self):
@@ -44,10 +57,8 @@ class pmc:
                 self.record_id = self.data[_data]
         try:
             bh_stockupplan().main()
-            bh_procurement().main()
-            bh_productperformance().main()
+            getlisting().main()
             salesforecast().main()
-            bh_salesstatistics().main()
             self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
         except:
             self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})
@@ -60,6 +71,7 @@ class pmc:
         try:
             ai_modeldatarequests().main()
             modeltrain().main()
+            cg_aipredit().main()
             self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
         except:
             self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})

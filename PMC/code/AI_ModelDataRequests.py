@@ -1,6 +1,7 @@
 from .LingXingAPI import lingxingapi
 from datetime import datetime, timedelta
 import pandas as pd
+import os
 
 class ai_modeldatarequests:
 
@@ -41,7 +42,7 @@ class ai_modeldatarequests:
                             "广告花费":_data["spend"], # 广告花费
                             "大类排名":_data["cate_rank"], # 大类排名
                         }]
-                    }
+                    }#
                 if _data["price_list"][0]["seller_sku"] + "_" + _data["parent_asins"][0]["parent_asin"] + "_" + _data["asins"][0]["asin"] not in Lingxingproductperformance:
                     Lingxingproductperformance.update(Lingxingproductdict)
                 elif Lingxingproductperformance[_data["price_list"][0]["seller_sku"] + "_" + _data["parent_asins"][0]["parent_asin"] + "_" + _data["asins"][0]["asin"]][0]["大类排名"] < _data["cate_rank"]:
@@ -57,15 +58,30 @@ class ai_modeldatarequests:
                     result_dict.update({_data:result_list})
         return result_dict
 
+    def is_modified_today(self,filepath):
+        # 获取文件修改时间的时间戳
+        modify_timestamp = os.path.getmtime(filepath)
+        # 转换为datetime对象
+        modify_date = datetime.fromtimestamp(modify_timestamp).date()
+        # 获取当前日期
+        today = datetime.now().date()
+        # 比较日期
+        return modify_date == today
+
     def main(self):
         # 遍历get_data数据，拼接路径+key+xlsx进行读取，然后录入。读取失败的跳过
-        all_data = self.get_data(start_data="2025-02-18",end_data="2025-02-28")
+        all_data = self.get_data(start_data="2025-04-17",end_data="2025-04-25")
         for _data in all_data:
             try:
-                df = pd.read_excel(f"C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_files\\{_data}.xlsx")
+                if self.is_modified_today(f"C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_files\\{str(_data).replace('/', 'or')}.xlsx"):
+                    continue
+            except:
+                continue
+            try:
+                df = pd.read_excel(f"C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_files\\{str(_data).replace('/', 'or')}.xlsx")
             except:
                 continue
             for _data_1 in all_data[_data]:
                 new_row = [_data_1["日期"],_data_1["销量"],_data_1["大类排名"],_data_1["广告花费"]]
                 df.loc[len(df)] = new_row
-            df.to_excel(f"C:\\Project\\zlwl_pure_backend\\PMC\static\\msku_files\\{_data}.xlsx",index=False)
+            df.to_excel(f"C:\\Project\\zlwl_pure_backend\\PMC\static\\msku_files\\{str(_data).replace('/', 'or')}.xlsx",index=False)

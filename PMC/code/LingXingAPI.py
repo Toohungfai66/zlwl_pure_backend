@@ -171,6 +171,7 @@ class lingxingapi():
                 break
             else:
                 offset += 10000
+        time.sleep(13)
         return result_response
     
     # 获取FBA库存明细
@@ -232,13 +233,15 @@ class lingxingapi():
         for _data in sid_response["data"]:
             sid.append(_data["sid"])
         for _data in [sid[i:i + 200] for i in range(0, len(sid), 200)]:
-            time.sleep(12)
+            time.sleep(13)
             payload = {
                 "app_key":self.appId,
                 "access_token":self.__getAccessToken__(),
                 "timestamp":int(time.time()),
                 "offset": 0,
-                "length": 4000,
+                "length": 10000,
+                "sort_field":"volume",
+                "sort_type":"desc",
                 "sid":_data,
                 "summary_field":"msku",
                 "currency_code":"CNY",
@@ -252,8 +255,5 @@ class lingxingapi():
             api_url = "/bd/productPerformance/openApi/asinList"
             url = f"https://openapi.lingxing.com{api_url}?" + "&".join([key + "=" + str(payload[key]) for key in payload])
             response = requests.request("POST", url, headers=headers, json=payload).json()
-            try:
-                result_response.extend(response["data"]["list"])
-            except:
-                pass
+            result_response.extend(response["data"]["list"])
         return result_response

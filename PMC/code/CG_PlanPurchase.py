@@ -74,13 +74,13 @@ class cg_planpurchase:
             fields = {
                 "计划编号":_data["plan_sn"],
                 "创建批次号":_data["ppg_sn"],
-                "产品图片":_data["pic_url"],
+                "产品图片URL":_data["pic_url"],
                 "SKU":_data["sku"],
                 "MSKU":MSKU,
                 "FNSKU":_data["fnsku"],
                 "款名":_data["spu_name"],
                 "SPU":_data["spu"],
-                "品名":_data["product_name"],
+                "品名":str(_data["product_name"]).split("&")[0],
                 "国家":_data["marketplace"],
                 "店铺":_data["seller_name"],
                 "供应商":_data["supplier_name"],
@@ -117,5 +117,6 @@ class cg_planpurchase:
                 payload_dict = {"records":_data}
                 feishuapi().__postUpdatesDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblMT8KYNHF28z5Z', payload_dict = payload_dict)
         if len(delete_data_list) != 0:
-            payload_dict = {"records":delete_data_list}
-            feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblMT8KYNHF28z5Z', payload_dict = payload_dict)
+            for _data in [delete_data_list[i:i + 500] for i in range(0, len(delete_data_list), 500)]:
+                payload_dict = {"records":_data}
+                feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tbleZ1v87gYaCB7G', payload_dict = payload_dict)

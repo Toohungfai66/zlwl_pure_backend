@@ -97,6 +97,7 @@ class bh_salesstatistics:
             new_date_ranges_290.append((new_start_date_290.strftime('%Y-%m-%d'), new_end_date_290.strftime('%Y-%m-%d')))
             new_date_ranges_335.append((new_start_date_335.strftime('%Y-%m-%d'), new_end_date_335.strftime('%Y-%m-%d')))
             new_date_ranges_365.append((new_start_date_365.strftime('%Y-%m-%d'), new_end_date_365.strftime('%Y-%m-%d')))
+            
         FeishuReult = self.FEISHU_FBA_DICT()
         result_dict = {}
         new_date_ranges_now = self._30_age_sal()
@@ -135,10 +136,4 @@ class bh_salesstatistics:
                 # 以500为划分，更新回飞书表格，正常的更新
                 for _data in [update_data_list[i:i + 500] for i in range(0, len(update_data_list), 500)]:
                     payload_dict = {"records":_data}
-                    while True:
-                        try:
-                            feishuapi().__postUpdatesDatas__(app_token = 'KVZ9bIrm9azOpqseGx3cIkRfn4f', table_id = 'tblzV27KDQw1t96z', payload_dict = payload_dict)
-                            break
-                        except:
-                            time.sleep(10)
-                            continue
+                    feishuapi().__postUpdatesDatas__(app_token = 'KVZ9bIrm9azOpqseGx3cIkRfn4f', table_id = 'tblzV27KDQw1t96z', payload_dict = payload_dict)

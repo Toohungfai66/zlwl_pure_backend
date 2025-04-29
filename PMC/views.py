@@ -42,3 +42,10 @@ def pmc_warehouse(request):
     thread.start()
     # 主函数继续执行，无需等待线程执行完毕
     return HttpResponse("请等待几分钟!")
+
+def cg_orderpurchase(request):
+    thread = threading.Thread(target=pmc().__CG_orderPurchase__)
+    # 启动线程
+    thread.start()
+    # 主函数继续执行，无需等待线程执行完毕
+    return HttpResponse("请等待几分钟!")
