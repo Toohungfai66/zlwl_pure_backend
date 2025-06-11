@@ -76,9 +76,11 @@ class lingxingapi():
                 payload.update({"searchField":"asin", "searchValue":searchValue})
             payload.update({"sign":SignBase.generate_sign(self.appId,payload)})
             headers = {}
+            print(payload)
             api_url = "/bd/profit/report/open/report/asin/list"
             url = f"https://openapi.lingxing.com{api_url}?" + "&".join([key + "=" + str(payload[key]) for key in payload])
             response = requests.request("POST", url, headers=headers, json=payload).json()
+            print(response)
             result_response.extend(response["data"]["records"])
             if len(response["data"]["records"]) != 10000:
                 break

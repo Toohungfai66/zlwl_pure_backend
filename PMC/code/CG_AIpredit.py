@@ -71,6 +71,10 @@ class cg_aipredit:
                 pkl_name = _data["fields"]["MSKU"]['value'][0]['text'] + "_" + _data["fields"]["父ASIN"]['value'][0]['text'] + "_" + _data["fields"]["ASIN"]['value'][0]['text']
                 pkl_name = str(pkl_name).replace('/', 'or')
                 if pkl_name + ".pkl" not in os.listdir("C:\\Project\\Zlwl\\PMC\\static\\msku_fiels_model"):
+                    update_data_list.append({
+                        "record_id":_data["record_id"],
+                        "fields": {"周期(第一周)":0,"周期(第二周)":0,"周期(第三周)":0,"周期(第四周)":0,"周期(第五周)":0,"周期(第六周)":0,"周期(第七周)":0,"周期(第八周)":0,"周期(第九周)":0,"周期(第十周)":0}
+                    }) 
                     continue
                 if pkl_name in if_list:
                     update_data_list.append({
@@ -82,13 +86,12 @@ class cg_aipredit:
                 for _data_1 in ["周期(第一周)","周期(第二周)","周期(第三周)","周期(第四周)","周期(第五周)","周期(第六周)","周期(第七周)","周期(第八周)","周期(第九周)","周期(第十周)"]:
                     # 输入的日期范围字符串
                     date_range_str = _data["fields"][_data_1]['value'][0]['text']
-
                     # 分割日期范围字符串为起始日期和结束日期
-                    start_str, end_str = date_range_str.split('-')
-
+                    start_str = str(date_range_str).split('，')[0]
+                    end_str = str(date_range_str).split('，')[-1]
                     # 将字符串转换为 datetime 对象
-                    start_date = datetime.strptime(start_str, "%Y/%m/%d")
-                    end_date = datetime.strptime(end_str, "%Y/%m/%d")
+                    start_date = datetime.strptime(start_str, "%Y-%m-%d")
+                    end_date = datetime.strptime(end_str, "%Y-%m-%d")
 
                     # 生成日期列表
                     date_list = []
@@ -129,8 +132,13 @@ class cg_aipredit:
                     "record_id":_data["record_id"],
                     "fields": fields
                 }) 
+            else:
+                update_data_list.append({
+                    "record_id":_data["record_id"],
+                    "fields": {"周期(第一周)":0,"周期(第二周)":0,"周期(第三周)":0,"周期(第四周)":0,"周期(第五周)":0,"周期(第六周)":0,"周期(第七周)":0,"周期(第八周)":0,"周期(第九周)":0,"周期(第十周)":0}
+                }) 
         if len(update_data_list) != 0:
             # 以500为划分，更新回飞书表格，正常的更新
             for _data in [update_data_list[i:i + 500] for i in range(0, len(update_data_list), 500)]:
                 payload_dict = {"records":_data}
-                feishuapi().__postUpdatesDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblsiC3jAdIqbbfG', payload_dict = payload_dict)
+                print(feishuapi().__postUpdatesDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblsiC3jAdIqbbfG', payload_dict = payload_dict))

@@ -161,6 +161,7 @@ class warehouse:
         return result
     
     # 采购公用仓库存
+    # https://qxdw48i58l3.feishu.cn/base/XHQPbO5yxay4EysVhf1cdbRanbK?table=tblknLFWlbnnRr7L&view=vewQtgSHPi
     def project_CG(self):
         options = webdriver.ChromeOptions()
         options.add_argument("--headless")
@@ -181,7 +182,7 @@ class warehouse:
             if cookie["name"] == 'authToken':
                 result_cookie = unquote_plus(cookie['value'])
         cookies = unquote(result_cookie)
-        LingxingBDKCResult = lingxingrpa(cookies=cookies).__getBDKCdata__(wid_list="6512,14508,8356,14437,11459,11458,12136,14548,12098,4508,14119,13301,14125,13296,14121,13297,14127,13294,14120,13293,14123,13300,14126,13292,14124,13295,14128,13298,14122,13299,8349,10040,10834,13086,6927,7111,8350,9485,7757,13609,13610,13611,6925,13095,6928,11214,12066,6511,8353")
+        LingxingBDKCResult = lingxingrpa(cookies=cookies).__getBDKCdata__(wid_list="6512,7574,7523,7521,8357,7522,14508,14990,7573,7526,7524,7525,8356,14437,14991,11459,11367,11458,11366,12136,14548,12098,6926,6924,9136,8192,8303,14119,13301,14125,13296,14121,13297,14127,13294,14120,13293,14123,13300,14126,13292,14124,13295,14128,13298,14122,13299,8349,10040,11516,10834,8354,13086,7163,6927,7111,8350,4508,8336,6929,9485,7757,13609,13610,13611,14496,6925,13095,6928,11214,12066,6513,6511,8353")
         LingxingHWKCResult = lingxingrpa(cookies=cookies).__getBDKCdata__(wid_list="11820,11301,7513,12137,12503,12099,12523,7056,13446,7216,8982,14314,13447,7038,8207,12758,7747,7144,8981,9486,6589,9173,9456,7215,7254,7042,7041,7212,7040")
         LingxingFBAResult = lingxingrpa(cookies=cookies).__getFBAKCdata__()
         driver.close()
@@ -213,14 +214,14 @@ class warehouse:
                 JTFZR = JTFZR + _data_1 + ","
             pay_dict.update({"具体负责人":JTFZR[:-1]})
             insert_data_list.append({"fields":pay_dict})
-        delete_data_list = self.FEISHU_FBA_DICT(app_token="TxmobrecbaIyblsh9p8cv3k6n3f",table_id="tbleZ1v87gYaCB7G",project_name="CG")
+        delete_data_list = self.FEISHU_FBA_DICT(app_token="XHQPbO5yxay4EysVhf1cdbRanbK",table_id="tblknLFWlbnnRr7L",project_name="CG")
         for _data in [delete_data_list[i:i + 500] for i in range(0, len(delete_data_list), 500)]:
             payload_dict = {"records":_data}
-            feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tbleZ1v87gYaCB7G', payload_dict = payload_dict)
+            feishuapi().__deleteBitableDatas__(app_token = 'XHQPbO5yxay4EysVhf1cdbRanbK', table_id = 'tblknLFWlbnnRr7L', payload_dict = payload_dict)
         # 以500为划分，更新回飞书表格，正常的更新
         for _data in [insert_data_list[i:i + 500] for i in range(0, len(insert_data_list), 500)]:
             payload_dict = {"records":_data}
-            feishuapi().__insertBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tbleZ1v87gYaCB7G', payload_dict = payload_dict)
+            feishuapi().__insertBitableDatas__(app_token = 'XHQPbO5yxay4EysVhf1cdbRanbK', table_id = 'tblknLFWlbnnRr7L', payload_dict = payload_dict)
         
         # 海外仓库存
         insert_data_list = []
@@ -249,14 +250,14 @@ class warehouse:
                 JTFZR = JTFZR + _data_1 + ","
             pay_dict.update({"具体负责人":JTFZR[:-1]})
             insert_data_list.append({"fields":pay_dict})
-        delete_data_list = self.FEISHU_FBA_DICT(app_token="TxmobrecbaIyblsh9p8cv3k6n3f",table_id="tbllrmE3JEIPxhnC",project_name="CG")
+        delete_data_list = self.FEISHU_FBA_DICT(app_token="XHQPbO5yxay4EysVhf1cdbRanbK",table_id="tblOCtOH40lHppCH",project_name="CG")
         for _data in [delete_data_list[i:i + 500] for i in range(0, len(delete_data_list), 500)]:
             payload_dict = {"records":_data}
-            feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tbllrmE3JEIPxhnC', payload_dict = payload_dict)
+            feishuapi().__deleteBitableDatas__(app_token = 'XHQPbO5yxay4EysVhf1cdbRanbK', table_id = 'tblOCtOH40lHppCH', payload_dict = payload_dict)
         # 以500为划分，更新回飞书表格，正常的更新
         for _data in [insert_data_list[i:i + 500] for i in range(0, len(insert_data_list), 500)]:
             payload_dict = {"records":_data}
-            feishuapi().__insertBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tbllrmE3JEIPxhnC', payload_dict = payload_dict)
+            feishuapi().__insertBitableDatas__(app_token = 'XHQPbO5yxay4EysVhf1cdbRanbK', table_id = 'tblOCtOH40lHppCH', payload_dict = payload_dict)
 
         # FBA库存明细
         insert_data_list = []
@@ -295,14 +296,14 @@ class warehouse:
                 JTFZR = JTFZR + _data_1 + ","
             pay_dict.update({"具体负责人":JTFZR[:-1]})
             insert_data_list.append({"fields":pay_dict})
-        delete_data_list = self.FEISHU_FBA_DICT(app_token="TxmobrecbaIyblsh9p8cv3k6n3f",table_id="tbl5WaiRhL8hmSb0",project_name="CG")
+        delete_data_list = self.FEISHU_FBA_DICT(app_token="XHQPbO5yxay4EysVhf1cdbRanbK",table_id="tblRj9eCz4hEJXPy",project_name="CG")
         for _data in [delete_data_list[i:i + 500] for i in range(0, len(delete_data_list), 500)]:
             payload_dict = {"records":_data}
-            feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tbl5WaiRhL8hmSb0', payload_dict = payload_dict)
+            feishuapi().__deleteBitableDatas__(app_token = 'XHQPbO5yxay4EysVhf1cdbRanbK', table_id = 'tblRj9eCz4hEJXPy', payload_dict = payload_dict)
         # 以500为划分，更新回飞书表格，正常的更新
         for _data in [insert_data_list[i:i + 500] for i in range(0, len(insert_data_list), 500)]:
             payload_dict = {"records":_data}
-            feishuapi().__insertBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tbl5WaiRhL8hmSb0', payload_dict = payload_dict)
+            feishuapi().__insertBitableDatas__(app_token = 'XHQPbO5yxay4EysVhf1cdbRanbK', table_id = 'tblRj9eCz4hEJXPy', payload_dict = payload_dict)
 
     def get_latest_file(self,folder_path):
         latest_file = None
@@ -414,20 +415,20 @@ class warehouse:
             for _, row in df.iterrows()
         ]
         # 查询飞书数据
-        delete_data_list = self.FEISHU_FBA_DICT(app_token="TxmobrecbaIyblsh9p8cv3k6n3f", table_id="tbl1evLX1uVd5TJ3", project_name="QC")
+        delete_data_list = self.FEISHU_FBA_DICT(app_token="XjL9biLNPaja1Tsb0vRcGGSFnLg", table_id="tbl5f4ELcY6xYKoj", project_name="QC")
         # 删除原飞书数据
         for _data in [delete_data_list[i:i + 500] for i in range(0, len(delete_data_list), 500)]:
             payload_dict = {"records":_data}
-            feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tbl1evLX1uVd5TJ3', payload_dict = payload_dict)
+            feishuapi().__deleteBitableDatas__(app_token = 'XjL9biLNPaja1Tsb0vRcGGSFnLg', table_id = 'tbl5f4ELcY6xYKoj', payload_dict = payload_dict)
         # 插入最新数据
         for _data in [insert_data_list[i:i + 500] for i in range(0, len(insert_data_list), 500)]:
             payload_dict = {"records":_data}
-            feishuapi().__insertBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tbl1evLX1uVd5TJ3', payload_dict = payload_dict)
+            feishuapi().__insertBitableDatas__(app_token = 'XjL9biLNPaja1Tsb0vRcGGSFnLg', table_id = 'tbl5f4ELcY6xYKoj', payload_dict = payload_dict)
 
     def project_HB(self):
-        BD = self.FEISHU_FBA_DICT(app_token="TxmobrecbaIyblsh9p8cv3k6n3f", table_id="tbleZ1v87gYaCB7G", project_name="BDHW")
-        HW = self.FEISHU_FBA_DICT(app_token="TxmobrecbaIyblsh9p8cv3k6n3f", table_id="tbllrmE3JEIPxhnC", project_name="BDHW")
-        FBA = self.FEISHU_FBA_DICT(app_token="TxmobrecbaIyblsh9p8cv3k6n3f", table_id="tbl5WaiRhL8hmSb0", project_name="FBA")
+        BD = self.FEISHU_FBA_DICT(app_token="XHQPbO5yxay4EysVhf1cdbRanbK", table_id="tblknLFWlbnnRr7L", project_name="BDHW")
+        HW = self.FEISHU_FBA_DICT(app_token="XHQPbO5yxay4EysVhf1cdbRanbK", table_id="tblOCtOH40lHppCH", project_name="BDHW")
+        FBA = self.FEISHU_FBA_DICT(app_token="XHQPbO5yxay4EysVhf1cdbRanbK", table_id="tblRj9eCz4hEJXPy", project_name="FBA")
         All_data = {}
         All_data.update(BD)
         All_data.update(HW)
@@ -530,16 +531,16 @@ class warehouse:
                 pay_dict.update({"仓库区域":"FBA仓"})
             insert_data_list.append({"fields":pay_dict})
         # 查询飞书数据
-        delete_data_list = self.FEISHU_FBA_DICT(app_token="TxmobrecbaIyblsh9p8cv3k6n3f", table_id="tblLcwFImaNLcJVc")
+        delete_data_list = self.FEISHU_FBA_DICT(app_token="XjL9biLNPaja1Tsb0vRcGGSFnLg", table_id="tbl4FY5G76uBeqLN")
         # 删除原飞书数据
         for _data in [delete_data_list[i:i + 500] for i in range(0, len(delete_data_list), 500)]:
             payload_dict = {"records":_data}
-            feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblLcwFImaNLcJVc', payload_dict = payload_dict)
+            feishuapi().__deleteBitableDatas__(app_token = 'XjL9biLNPaja1Tsb0vRcGGSFnLg', table_id = 'tbl4FY5G76uBeqLN', payload_dict = payload_dict)
         # 以500为划分，更新回飞书表格，正常的更新
         for _data in [insert_data_list[i:i + 500] for i in range(0, len(insert_data_list), 500)]:
             payload_dict = {"records":_data}
-            print(feishuapi().__insertBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblLcwFImaNLcJVc', payload_dict = payload_dict))
+            print(feishuapi().__insertBitableDatas__(app_token = 'XjL9biLNPaja1Tsb0vRcGGSFnLg', table_id = 'tbl4FY5G76uBeqLN', payload_dict = payload_dict))
     def main(self):
         self.project_CG()
-        self.project_HB()
+        # self.project_HB()
         # self.project_QC()

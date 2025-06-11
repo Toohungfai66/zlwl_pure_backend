@@ -415,16 +415,16 @@ class amazon_target_performance_asin:
         if len(payload_original) != 0:
             for _data in [payload_original[i:i + 500] for i in range(0, len(payload_original), 500)]:
                 payload_dict = {"records":_data}
-                feishuapi().__postUpdatesDatas__(app_token = app_token, table_id = table_id, payload_dict = payload_dict)
+                print(feishuapi().__postUpdatesDatas__(app_token = app_token, table_id = table_id, payload_dict = payload_dict))
 
         # 新增表更新
         if len(new_payload_original) != 0:
             for _data in [new_payload_original[i:i + 500] for i in range(0, len(new_payload_original), 500)]:
                 payload_dict = {"records":_data}
-                feishuapi().__postUpdatesDatas__(app_token = app_token, table_id = Xz_table_id, payload_dict = payload_dict)
+                print(feishuapi().__postUpdatesDatas__(app_token = app_token, table_id = Xz_table_id, payload_dict = payload_dict))
 
         # 新增表插入
         if len(insert_newdatas) != 0:
             for _data in [insert_newdatas[i:i + 500] for i in range(0, len(insert_newdatas), 500)]:
                 payload_dict = {"records":_data}
-                feishuapi().__insertBitableDatas__(app_token = app_token, table_id = Xz_table_id, payload_dict = payload_dict)
+                print(feishuapi().__insertBitableDatas__(app_token = app_token, table_id = Xz_table_id, payload_dict = payload_dict))

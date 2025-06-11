@@ -22,4 +22,5 @@ urlpatterns = [
     path('Project_id/', views.Project_id, name='Project_id'),
     path('TargetPerformance/', include('TargetPerformance.urls')),
     path('PMC/', include('PMC.urls')),
+    path('tiktok/', include('tiktok.urls')),
 ]

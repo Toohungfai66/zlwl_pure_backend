@@ -10,7 +10,7 @@ import warnings
 from sklearn.exceptions import UndefinedMetricWarning
 from datetime import datetime, timedelta
 
-class modeltrain:
+class modeltrain_bh:
     def __init__(self):
         warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
 
@@ -43,15 +43,15 @@ class modeltrain:
         return modify_date == today
 
     def main(self):
-        for _data in os.listdir("C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_files"):
-            # if _data[:-5] + ".pkl" in os.listdir("C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_fiels_model"):
-            #     continue
+        for _data in os.listdir("C:\\Project\\zlwl_pure_backend\\PMC\\static\\ParentAsin_fiels"):
+            if _data[:-5] + ".pkl" in os.listdir("C:\\Project\\zlwl_pure_backend\\PMC\\static\\ParentAsin_fiels_model"):
+                continue
             try:
-                if self.is_modified_today(f"C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_files\\{_data}"):
+                if self.is_modified_today(f"C:\\Project\\zlwl_pure_backend\\PMC\\static\\ParentAsin_fiels\\{_data}"):
                     continue
             except:
                 continue
-            df = pd.read_excel(f"C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_files\\{_data}")
+            df = pd.read_excel(f"C:\\Project\\zlwl_pure_backend\\PMC\\static\\ParentAsin_fiels\\{_data}")
             df = df[['日期','销量']]
             df['日期'] = pd.to_datetime(df['日期'])
             df['年'] = df['日期'].dt.year
@@ -119,4 +119,4 @@ class modeltrain:
             best_iteration = model.best_iteration
             # 使用最优迭代次数重新训练模型
             model = xgb.train(params, dtrain, num_boost_round=best_iteration)
-            joblib.dump(model, f'C:\\Project\\zlwl_pure_backend\\PMC\\static\\msku_fiels_model\\{_data[:-5]}.pkl')
+            joblib.dump(model, f'C:\\Project\\zlwl_pure_backend\\PMC\\static\\ParentAsin_fiels_model\\{_data[:-5]}.pkl')

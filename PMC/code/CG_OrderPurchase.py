@@ -3,6 +3,7 @@ from .LingXingAPI import lingxingapi
 from datetime import datetime, timedelta  
 import json
 import requests
+import re
 
 class cg_orderPurchase:
 
@@ -27,15 +28,44 @@ class cg_orderPurchase:
         response = requests.request("POST", url, headers=headers, data=payload)
         return response.json()
 
-    def FEISHU_FBA_DICT(self) -> dict:
+    def FEISHU_FBA_DICT(self, project_name) -> dict:
         page_token = ''
         has_more = True
         feishu_datas = []
+        if project_name == "one":
+            field_names = ["ID"]
+        elif project_name == "two":
+            field_names = [
+                    "ID",
+                    "周期(第一周)",
+                    "周期(第二周)",
+                    "周期(第三周)",
+                    "周期(第四周)",
+                    "周期(第五周)",
+                    "周期(第六周)",
+                    "周期(第七周)",
+                    "周期(第八周)",
+                    "周期(第九周)",
+                    "周期(第十周)",
+                    "实际到货量(第一周)",
+                    "实际到货量(第二周)",
+                    "实际到货量(第三周)",
+                    "实际到货量(第四周)",
+                    "实际到货量(第五周)",
+                    "实际到货量(第六周)",
+                    "实际到货量(第七周)",
+                    "实际到货量(第八周)",
+                    "实际到货量(第九周)",
+                    "实际到货量(第十周)",
+                    "到货量",
+                    "SKU",
+                    "采购单号"
+                ]
+        else:
+            field_names = []
         while has_more:
             filter_condition = {
-                "field_names": [
-                    "ID",
-                ],
+                "field_names": field_names,
                 "filter": {
                     "conjunction": "and",
                     "conditions": []
@@ -53,7 +83,77 @@ class cg_orderPurchase:
                 raise Exception(response['msg'])
         result_dict = {}
         for feishu_data in feishu_datas:
-            result_dict.update({feishu_data["fields"]["ID"]:feishu_data["record_id"]})
+            if project_name == "one":
+                result_dict.update({feishu_data["fields"]["ID"]:feishu_data["record_id"]})
+            elif project_name == "two":
+                if "实际到货量(第一周)" in feishu_data["fields"]:
+                    data_sj_1 = feishu_data["fields"]["实际到货量(第一周)"]
+                else:
+                    data_sj_1 = 0
+                if "实际到货量(第二周)" in feishu_data["fields"]:
+                    data_sj_2 = feishu_data["fields"]["实际到货量(第二周)"]
+                else:
+                    data_sj_2 = 0
+                if "实际到货量(第三周)" in feishu_data["fields"]:
+                    data_sj_3 = feishu_data["fields"]["实际到货量(第三周)"]
+                else:
+                    data_sj_3 = 0
+                if "实际到货量(第四周)" in feishu_data["fields"]:
+                    data_sj_4 = feishu_data["fields"]["实际到货量(第四周)"]
+                else:
+                    data_sj_4 = 0
+                if "实际到货量(第五周)" in feishu_data["fields"]:
+                    data_sj_5 = feishu_data["fields"]["实际到货量(第五周)"]
+                else:
+                    data_sj_5 = 0
+                if "实际到货量(第六周)" in feishu_data["fields"]:
+                    data_sj_6 = feishu_data["fields"]["实际到货量(第六周)"]
+                else:
+                    data_sj_6 = 0
+                if "实际到货量(第七周)" in feishu_data["fields"]:
+                    data_sj_7 = feishu_data["fields"]["实际到货量(第七周)"]
+                else:
+                    data_sj_7 = 0
+                if "实际到货量(第八周)" in feishu_data["fields"]:
+                    data_sj_8 = feishu_data["fields"]["实际到货量(第八周)"]
+                else:
+                    data_sj_8 = 0
+                if "实际到货量(第九周)" in feishu_data["fields"]:
+                    data_sj_9 = feishu_data["fields"]["实际到货量(第九周)"]
+                else:
+                    data_sj_9 = 0
+                if "实际到货量(第十周)" in feishu_data["fields"]:
+                    data_sj_10 = feishu_data["fields"]["实际到货量(第十周)"]
+                else:
+                    data_sj_10 = 0
+                result_dict.update({feishu_data["fields"]["ID"]:{
+                    "record_id":feishu_data["record_id"],
+                    "周期(第一周)":feishu_data["fields"]["周期(第一周)"]['value'][0]["text"],
+                    "周期(第二周)":feishu_data["fields"]["周期(第二周)"]['value'][0]["text"],
+                    "周期(第三周)":feishu_data["fields"]["周期(第三周)"]['value'][0]["text"],
+                    "周期(第四周)":feishu_data["fields"]["周期(第四周)"]['value'][0]["text"],
+                    "周期(第五周)":feishu_data["fields"]["周期(第五周)"]['value'][0]["text"],
+                    "周期(第六周)":feishu_data["fields"]["周期(第六周)"]['value'][0]["text"],
+                    "周期(第七周)":feishu_data["fields"]["周期(第七周)"]['value'][0]["text"],
+                    "周期(第八周)":feishu_data["fields"]["周期(第八周)"]['value'][0]["text"],
+                    "周期(第九周)":feishu_data["fields"]["周期(第九周)"]['value'][0]["text"],
+                    "周期(第十周)":feishu_data["fields"]["周期(第十周)"]['value'][0]["text"],
+                    "实际到货量(第一周)":data_sj_1,
+                    "实际到货量(第二周)":data_sj_2,
+                    "实际到货量(第三周)":data_sj_3,
+                    "实际到货量(第四周)":data_sj_4,
+                    "实际到货量(第五周)":data_sj_5,
+                    "实际到货量(第六周)":data_sj_6,
+                    "实际到货量(第七周)":data_sj_7,
+                    "实际到货量(第八周)":data_sj_8,
+                    "实际到货量(第九周)":data_sj_9,
+                    "实际到货量(第十周)":data_sj_10,
+                    "到货量":feishu_data["fields"]["到货量"],
+                    "SKU":feishu_data["fields"]["SKU"][0]["text"],
+                    "采购单号":feishu_data["fields"]["采购单号"][0]["text"]
+                    }})
+            else:
+                pass
         return result_dict
 
     def main(self):
@@ -78,7 +178,9 @@ class cg_orderPurchase:
                 name_open_id_dict[_data_2["name"]] = _data_2["open_id"]
         # 采购计划领星数据整理
         response_lx_planpurchase = lingxingapi().__getOrderPurchase__(start_date=start_date,end_date=end_date)
-        FeishuReult = self.FEISHU_FBA_DICT()
+
+        FeishuReult = self.FEISHU_FBA_DICT(project_name = "one")
+
         sid_list = lingxingapi().__AmazonStore__()
         sid_dict = {}
         for _data in sid_list["data"]:
@@ -183,7 +285,7 @@ class cg_orderPurchase:
                         "采购量":_data["item_list"][_data_1]["quantity_real"],
                         "箱数":_data["item_list"][_data_1]["cases_num"],
                         # "税率":float(_data["item_list"][_data_1]["tax_rate"]),
-                        "金额":_data["item_list"][_data_1]["quantity_real"],
+                        # "金额":float(_data["total_price"]),
                         "价税合计":_data["item_list"][_data_1]["amount"],
                         "到货量":_data["item_list"][_data_1]["quantity_entry"],
                         "系统待到货量":_data["item_list"][_data_1]["quantity_receive"],
@@ -219,3 +321,48 @@ class cg_orderPurchase:
             for _data in [delete_data_list[i:i + 500] for i in range(0, len(delete_data_list), 500)]:
                 payload_dict = {"records":_data}
                 feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblsiC3jAdIqbbfG', payload_dict = payload_dict)
+    
+        FeishuReult = self.FEISHU_FBA_DICT(project_name = "two")
+        # 计算昨天的日期
+        yesterday = datetime.now() - timedelta(days=1)
+        # 格式化输出昨天的日期
+        current_date = yesterday.strftime("%Y-%m-%d")
+
+        # current_date = "2025-05-26"
+
+        getorders = lingxingapi().__getOrders__(start_date=current_date,end_date=current_date)
+        result_dict_getorders = {}
+        for _data in getorders:
+            for _data_1 in _data["item_list"]:
+                orde_id = _data["purchase_order_sn"] + _data_1["sku"]
+                rkl = _data_1["product_total"]
+                if orde_id in result_dict_getorders:
+                    result_dict_getorders.update({orde_id:result_dict_getorders[orde_id] + rkl})
+                else:
+                    result_dict_getorders.update({orde_id:rkl})
+        update_data_list = []
+        for _data in FeishuReult:
+            if FeishuReult[_data]["采购单号"]+FeishuReult[_data]["SKU"] not in result_dict_getorders:
+                continue
+            fields_name_num = ""
+            for _data_1 in FeishuReult[_data]:
+                if "周期" not in _data_1 :
+                    continue
+                if current_date in FeishuReult[_data][_data_1]:
+                    fields_name_num = re.findall("\(.+\)",_data_1)[0]
+                    break
+            if len(fields_name_num) == 0:
+                continue
+            else:
+                fields = {
+                    "实际到货量"+fields_name_num : FeishuReult[_data]["实际到货量"+fields_name_num] + result_dict_getorders[FeishuReult[_data]["采购单号"]+FeishuReult[_data]["SKU"]]
+                }
+            update_data_list.append({
+                "record_id":FeishuReult[_data]["record_id"],
+                "fields":fields
+            })
+        if len(update_data_list) != 0:
+            # 以500为划分，更新回飞书表格，正常的更新
+            for _data in [update_data_list[i:i + 500] for i in range(0, len(update_data_list), 500)]:
+                payload_dict = {"records":_data}
+                print(feishuapi().__postUpdatesDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblsiC3jAdIqbbfG', payload_dict = payload_dict))

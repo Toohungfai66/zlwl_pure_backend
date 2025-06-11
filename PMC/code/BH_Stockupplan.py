@@ -75,7 +75,9 @@ class bh_stockupplan:
                 if len(_data["principal_info"]) == 0:
                     principal_name = ""
                 else:
+                    print(_data["principal_info"])
                     principal_name = _data["principal_info"][0]["principal_name"]
+                    print(principal_name)
                 if principal_name == "余琛瑶":
                     principal_name = "余琛瑶Cali"
                 elif principal_name == "刘捷Leo":
@@ -87,18 +89,20 @@ class bh_stockupplan:
                     "SKU":_data["local_sku"],
                     "品名":_data["local_name"],
                     "标题":_data["item_name"],
-                    "ASIN":_data["asin"],
+                    "子ASIN":_data["asin"],
                     "父ASIN":_data["parent_asin"],
                     "店铺":sid_name_dict[_data["sid"]],
                     "站点":_data["marketplace"],
                     "负责人":principal_name,
-                    "大类排名":_data["seller_rank"],
                     "制单日期":datetime.now().strftime("%Y-%m-%d"),
-                    "FBA在库+在途":_data["afn_fulfillable_quantity"] + _data["reserved_fc_transfers"] + _data["reserved_fc_processing"] + _data["afn_inbound_shipped_quantity"]
+                    "FBA可售":_data["afn_fulfillable_quantity"],
+                    "FBA调拨":_data["reserved_fc_transfers"],
+                    "FBA在途":_data["afn_inbound_shipped_quantity"]
                 }
                 if principal_name in name_open_id_dict:
                     pay_dict["负责人(人员)"] = [{"id":name_open_id_dict[principal_name]}]
                 insert_data_list.append({"fields":pay_dict})
+                
         delete_data_list = self.FEISHU_FBA_DICT()
         for _data in [delete_data_list[i:i + 500] for i in range(0, len(delete_data_list), 500)]:
             payload_dict = {"records":_data}

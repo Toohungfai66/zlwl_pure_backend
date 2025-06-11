@@ -69,7 +69,7 @@ class clean_up_regularly:
             # 上传数据
             while True:
                 try:
-                    feishuapi().__postUpdatesDatas__(app_token = 'XHPsbDoxhasv4fswQ9hckwLmnbc', table_id = 'tbl5RlIhqMzC8KkC', payload_dict = payload_dict)
+                    print(feishuapi().__postUpdatesDatas__(app_token = 'XHPsbDoxhasv4fswQ9hckwLmnbc', table_id = 'tbl5RlIhqMzC8KkC', payload_dict = payload_dict))
                     break
                 except:
                     continue

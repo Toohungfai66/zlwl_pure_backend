@@ -22,6 +22,7 @@ class target_Performance:
         for _data in self.data:
             if _data == "亚马逊目标业绩-父ASIN":
                 self.record_id = self.data[_data]
+        feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = {"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行中"}}]})
         try:
             amazon_target_performance_partASIN().main()
             amazon_target_performance_partASIN_newproduct().main()
@@ -34,6 +35,7 @@ class target_Performance:
         for _data in self.data:
             if _data == "亚马逊目标业绩-子ASIN":
                 self.record_id = self.data[_data]
+        feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = {"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行中"}}]})
         try:
             amazon_target_performance_asin().main()
             self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
@@ -45,6 +47,7 @@ class target_Performance:
         for _data in self.data:
             if _data == "沃尔玛目标业绩":
                 self.record_id = self.data[_data]
+        feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = {"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行中"}}]})
         try:
             waller_target_performance().main()
             self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
@@ -56,6 +59,7 @@ class target_Performance:
         for _data in self.data:
             if _data == "沃尔玛WFS库存更新":
                 self.record_id = self.data[_data]
+        feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = {"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行中"}}]})
         try:
             wfs().main()
             self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})

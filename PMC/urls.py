@@ -8,5 +8,6 @@ urlpatterns = [
     path('pmc_bhdata/', views.pmc_bhdata, name='pmc_bhdata'),
     path('pmc_aimodel/', views.pmc_aimodel, name='pmc_aimodel'),
     path('pmc_warehouse/', views.pmc_warehouse, name='pmc_warehouse'),
-    path('cg_orderpurchase/', views.cg_orderpurchase, name='cg_orderpurchase')
+    path('cg_orderpurchase/', views.cg_orderpurchase, name='cg_orderpurchase'),
+    path('cw_costbasedpricing/', views.cw_costbasedpricing, name='cw_costbasedpricing')
 ]

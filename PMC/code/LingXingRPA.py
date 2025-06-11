@@ -95,7 +95,7 @@ class lingxingrpa:
             'Auth-Token':self.cookies,
         }
         offset = 0
-        result_dict = {}
+        result_response = []
         while True:
             datas = {
                 "offset":offset,
@@ -111,21 +111,12 @@ class lingxingrpa:
                 "req_time_sequence":"/listing-api/api/product/showOnline$$5"
                 }
             response = requests.post(url=url,json=datas,headers=headers).json()
+            print(response)
             if len(response["data"]["list"]) == 0:
                 break
-            for data in response["data"]["list"]:
-                if data["fnsku"] == None:
-                    continue
-                elif len(data["fnsku"]) == 0:
-                    continue
-                result_dict[data["fnsku"] + "|" + data["seller_name"]] = {
-                    "category_text":data["category_text"],
-                    "product_brand_text":data["product_brand_text"],
-                    "thirty_volume":data["thirty_volume"],
-                    "yesterday_spend":data["yesterday_spend"]
-                    }
+            result_response.extend(response["data"]["list"])
             offset += 200
-        return result_dict
+        return result_response
     
     def __getFBAKCdata__(self) -> dict:
         url = "https://erp.lingxing.com/api/storage/fbaLists"
@@ -197,3 +188,64 @@ class lingxingrpa:
                 result_dict[dict_key] = ls_dict
             offset += 200
         return result_dict
+    
+    def __getProductList__(self) -> dict:
+        url = "https://erp.lingxing.com/api/product/lists"
+        headers = {
+            "x-ak-company-id":self.x_ak_company_id,
+            'Auth-Token':self.cookies,
+        }
+        offset = 0
+        result_response = []
+        while True:
+            datas = {
+                "search_field_time":"create_time",
+                "product_creator_uid":[],
+                "product_developer_uid":[],
+                "permission_uid":[],
+                "cg_opt_uid":[],
+                "supplier_id":[],
+                "sort_field":"create_time",
+                "sort_type":"desc",
+                "search_field":"msku",
+                "attribute":[],
+                "status":[],
+                "open_status":"",
+                "gtag_ids":"",
+                "senior_search_list":"[]",
+                "single_product_id":[],
+                "is_matched_listing":"",
+                "is_matched_alibaba":"",
+                "relation_aux":"",
+                "is_have_pic":"",
+                "cg_package":"",
+                "cg_product_gross_weight":{
+                    "left":"",
+                    "right":"",
+                    "symbol":"gt"
+                    },
+                "cg_price":{
+                    "left":"",
+                    "right":"",
+                    "symbol":"gt"
+                    },
+                "cg_transport_costs":{
+                    "left":"",
+                    "right":"",
+                    "symbol":"gt",
+                    "country_code":"US"
+                    },
+                "offset":offset,
+                "is_combo":"",
+                "length":200,
+                "is_aux":0,
+                "product_type":[1,2],
+                "selected_product_ids":"",
+                "req_time_sequence":"/api/product/lists$$16"
+                }
+            response = requests.post(url=url,json=datas,headers=headers).json()
+            if len(response["data"]["list"]) == 0:
+                break
+            result_response.extend(response["data"]["list"])
+            offset += 200
+        return result_response

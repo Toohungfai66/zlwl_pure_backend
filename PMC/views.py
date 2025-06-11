@@ -43,8 +43,17 @@ def pmc_warehouse(request):
     # 主函数继续执行，无需等待线程执行完毕
     return HttpResponse("请等待几分钟!")
 
+@csrf_exempt
 def cg_orderpurchase(request):
     thread = threading.Thread(target=pmc().__CG_orderPurchase__)
+    # 启动线程
+    thread.start()
+    # 主函数继续执行，无需等待线程执行完毕
+    return HttpResponse("请等待几分钟!")
+
+@csrf_exempt
+def cw_costbasedpricing(request):
+    thread = threading.Thread(target=pmc().__CW_CostBasedPricing__)
     # 启动线程
     thread.start()
     # 主函数继续执行，无需等待线程执行完毕
