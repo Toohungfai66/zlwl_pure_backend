@@ -199,7 +199,7 @@ class lingxingapi():
         return result_response
 
     # 产品表现
-    def __ProductPerformance__(self, start_date : str, end_date : str, search_value=None, summary_field="msku") -> json:
+    def __ProductPerformance__(self, start_date : str, end_date : str, search_value=None, summary_field="msku", currency_code="CNY") -> json:
         result_response = []
         sid = []
         sid_response = self.__AmazonStore__()
@@ -219,10 +219,11 @@ class lingxingapi():
                     "sort_type":"desc",
                     "sid":_data,
                     "summary_field":summary_field,
-                    "currency_code":"CNY",
                     "start_date":start_date,
                     "end_date":end_date,
                 }
+                if len(currency_code) != 0:
+                    payload.update({"currency_code":currency_code})
                 if search_value != None:
                     payload.update({"search_field":"msku","search_value":search_value})
                 payload.update({"sign":SignBase.generate_sign(self.appId,payload)})
@@ -230,7 +231,7 @@ class lingxingapi():
                 url = f"https://openapi.lingxing.com{api_url}?" + "&".join([key + "=" + str(payload[key]) for key in payload])
                 response = requests.request("POST", url, headers={}, json=payload).json()
                 result_response.extend(response["data"]["list"])
-                if len(response["data"]) != 10000:
+                if len(response["data"]["list"]) != 10000:
                     break
                 else:
                     offset += 10000

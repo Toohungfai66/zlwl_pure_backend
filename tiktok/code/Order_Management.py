@@ -95,6 +95,10 @@ class order_management:
         for _data in sid_response:
             sid_name_dict[_data["store_id"]] = _data["store_name"]
         date_dict = self.get_last_week_timestamps()
+        # date_dict = {
+        #     'start': 1750003200,  # 上周一 00:00:00 的时间戳
+        #     'end': 1750607999    # 上周日 23:59:59 的时间戳
+        # }
         lingxingresult = lingxingapi().__getOrderManagement__(start_time = date_dict["start"], end_time= date_dict["end"])
         status_list = ["无","同步中","已同步","未付款","待审核","待发货","已发货","已取消/不发货","不显示","平台发货"]
         insert_data_list = []

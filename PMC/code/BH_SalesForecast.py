@@ -152,7 +152,7 @@ class salesforecast:
                 # 提取特征列
                 X = df.drop(columns=['日期'])
                 # 将特征数据转换为 DMatrix 格式
-                dmatrix_X = xgb.DMatrix(X)
+                dmatrix_X = xgb.DMatrix(X) 
                 # 使用加载的模型进行预测
                 try:
                     y_pred = loaded_model.predict(dmatrix_X)

@@ -276,12 +276,16 @@ class warehouse:
                     "MSKU":LingxingFBAResult[_data]["seller_sku"],
                     "可用库存数量":LingxingFBAResult[_data]["available_total"],
                     "可用库存金额":LingxingFBAResult[_data]["available_total_price"],
+                    "可售":LingxingFBAResult[_data]["afn_fulfillable_quantity"],
+                    "调拨":LingxingFBAResult[_data]["reserved_fc_transfers"],
                     "总库存数量(FBA)":LingxingFBAResult[_data]["total"],
                     "总库存金额(FBA)":LingxingFBAResult[_data]["total_amount"],
                     "标发在途数量(FBA)":LingxingFBAResult[_data]["afn_inbound_shipped_quantity"],
                     "标发在途金额(FBA)":LingxingFBAResult[_data]["afn_inbound_shipped_quantity_price"],
                     "实际在途数量(FBA)":LingxingFBAResult[_data]["stock_up_num"],
                     "实际在途金额(FBA)":LingxingFBAResult[_data]["stock_up_num_price"],
+                    "长期供货天数":LingxingFBAResult[_data]["long_term_historical_days_of_supply"],
+                    "短期供货天数":LingxingFBAResult[_data]["short_term_historical_days_of_supply"],
                     "0-60天库龄数量(FBA)":LingxingFBAResult[_data]["inv_age_0_to_60_days"],
                     "0-60天库龄金额(FBA)":LingxingFBAResult[_data]["inv_age_0_to_60_price"],
                     "61-90天库龄数量(FBA)":LingxingFBAResult[_data]["inv_age_61_to_90_days"],
@@ -542,5 +546,5 @@ class warehouse:
             print(feishuapi().__insertBitableDatas__(app_token = 'XjL9biLNPaja1Tsb0vRcGGSFnLg', table_id = 'tbl4FY5G76uBeqLN', payload_dict = payload_dict))
     def main(self):
         self.project_CG()
-        # self.project_HB()
+        self.project_HB()
         # self.project_QC()

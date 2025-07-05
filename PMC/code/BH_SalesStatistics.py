@@ -51,7 +51,7 @@ class bh_salesstatistics:
         page_token = ''
         has_more = True
         feishu_datas = []
-        field_names = ["父ASIN","店铺","负责人","具体负责人"]
+        field_names = ["父ASIN","店铺","负责人","具体负责人","成交价"]
         if project == "xlyc":
             field_names.append("日期")
         while has_more:
@@ -86,7 +86,11 @@ class bh_salesstatistics:
             if "具体负责人" in feishu_data["fields"]:
                 datas["具体负责人"] = feishu_data["fields"]["具体负责人"][0]["text"]
             else:
-                continue
+                datas["具体负责人"] = ""
+            if "成交价" in feishu_data["fields"]:
+                datas["成交价"] = feishu_data["fields"]["成交价"]
+            else:
+                datas["成交价"] = 0
             result_dict.update({feishu_data["record_id"]:datas})
         return result_dict
     
@@ -144,15 +148,15 @@ class bh_salesstatistics:
             for _data_1 in Feishuresult:
                 if Feishuresult[_data_1]["日期"] != last_monday.strftime('%Y.%m.%d') + "-" +last_sunday.strftime('%Y.%m.%d'):
                     continue
-                Feishuresult_dict_2.update({Feishuresult[_data_1]["父ASIN"] + "|" + Feishuresult[_data_1]["店铺"]:_data_1})
+                Feishuresult_dict_2.update({Feishuresult[_data_1]["父ASIN"] + "|" + Feishuresult[_data_1]["店铺"]:{"record_id":_data_1,"CJJ":Feishuresult[_data_1]["成交价"]}})
             zz_list = []
             for _data_1 in Actual_sales_response:
                 zz_list.append(_data_1["parentAsin"][0] + "|" + _data_1["store_name"][0])
                 if _data_1["parentAsin"][0] + "|" + _data_1["store_name"][0] not in Feishuresult_dict_2:
                     continue
-                update_data_list.append({"fields":{"实际销量":int(_data_1["volumeTotal"])},"record_id":Feishuresult_dict_2[_data_1["parentAsin"][0] + "|" + _data_1["store_name"][0]]})
+                update_data_list.append({"fields":{"实际销量":int(_data_1["volumeTotal"]),"成交价":Feishuresult_dict_2[_data_1["parentAsin"][0] + "|" + _data_1["store_name"][0]]["CJJ"]},"record_id":Feishuresult_dict_2[_data_1["parentAsin"][0] + "|" + _data_1["store_name"][0]]["record_id"]})
             for _data_1 in set(Feishuresult_dict_2) - set(zz_list):
-                update_data_list.append({"fields":{"实际销量":0},"record_id":Feishuresult_dict_2[_data_1]})
+                update_data_list.append({"fields":{"实际销量":0,"成交价":0},"record_id":Feishuresult_dict_2[_data_1]["record_id"]})
 
             # 以500为划分，更新回飞书表格，正常的更新
             for _data_1 in [update_data_list[i:i + 500] for i in range(0, len(update_data_list), 500)]:
@@ -283,8 +287,6 @@ class bh_salesstatistics:
         listing_key_dict = {"事业一部":[],"事业二部":[],"事业三部":[],"事业四部":[],"事业五部":[],"事业六部":[],"事业八部":[],"事业九部":[],"事业十部":[]}
         xx_dict = {}
         for _data in listing_feishuresult:
-            if len(listing_feishuresult[_data]["负责人"]) == 0:
-                continue
             if "事业一部" in listing_feishuresult[_data]["具体负责人"]:
                 listing_key_dict.update({"事业一部":list(set(listing_key_dict["事业一部"] + [listing_feishuresult[_data]["父ASIN"] + "|" + listing_feishuresult[_data]["店铺"]]))})
                 xx_dict.update({listing_feishuresult[_data]["父ASIN"] + "|" + listing_feishuresult[_data]["店铺"]:{"负责人":listing_feishuresult[_data]["负责人"],"具体负责人":listing_feishuresult[_data]["具体负责人"]}})
@@ -324,8 +326,6 @@ class bh_salesstatistics:
                     data_1 = result_dict[_date] + [{"父ASIN":_data_1["parentAsin"][0],"店铺":_data_1["store_name"][0],"同比销量":int(_data_1["volumeTotal"])}]
                     result_dict.update({_date:data_1})      
         for _data in listing_key_dict:
-            newupdate_data = []
-            delete_data = []
             if _data == "事业一部":
                 app_token="TxmobrecbaIyblsh9p8cv3k6n3f"
                 table_id="tblZfMM49mxJjoaX"
@@ -358,8 +358,8 @@ class bh_salesstatistics:
             feishuresult = self.FEISHU_DICT(app_token=app_token,table_id=table_id,project="xlyc")
             key_list = set([feishuresult[_data_1]["父ASIN"] + "|" + feishuresult[_data_1]["店铺"] for _data_1 in feishuresult])
 
-            newupdate_data += list(set(listing_key_dict[_data]) - key_list)
-            delete_data += list(key_list - set(listing_key_dict[_data]))
+            newupdate_data = list(set(listing_key_dict[_data]) - key_list)
+            delete_data = list(key_list - set(listing_key_dict[_data]))
 
             if len(delete_data) != 0:
                 delete_data_list = []

@@ -47,6 +47,8 @@ class cg_orderPurchase:
                     "周期(第八周)",
                     "周期(第九周)",
                     "周期(第十周)",
+                    "周期(第十一周)",
+                    "周期(第十二周)",
                     "实际到货量(第一周)",
                     "实际到货量(第二周)",
                     "实际到货量(第三周)",
@@ -57,6 +59,8 @@ class cg_orderPurchase:
                     "实际到货量(第八周)",
                     "实际到货量(第九周)",
                     "实际到货量(第十周)",
+                    "实际到货量(第十一周)",
+                    "实际到货量(第十二周)",
                     "到货量",
                     "SKU",
                     "采购单号"
@@ -125,7 +129,15 @@ class cg_orderPurchase:
                 if "实际到货量(第十周)" in feishu_data["fields"]:
                     data_sj_10 = feishu_data["fields"]["实际到货量(第十周)"]
                 else:
-                    data_sj_10 = 0
+                    data_sj_11 = 0
+                if "实际到货量(第十一周)" in feishu_data["fields"]:
+                    data_sj_11 = feishu_data["fields"]["实际到货量(第十一周)"]
+                else:
+                    data_sj_11 = 0
+                if "实际到货量(第十二周)" in feishu_data["fields"]:
+                    data_sj_12 = feishu_data["fields"]["实际到货量(第十二周)"]
+                else:
+                    data_sj_12 = 0
                 result_dict.update({feishu_data["fields"]["ID"]:{
                     "record_id":feishu_data["record_id"],
                     "周期(第一周)":feishu_data["fields"]["周期(第一周)"]['value'][0]["text"],
@@ -138,6 +150,8 @@ class cg_orderPurchase:
                     "周期(第八周)":feishu_data["fields"]["周期(第八周)"]['value'][0]["text"],
                     "周期(第九周)":feishu_data["fields"]["周期(第九周)"]['value'][0]["text"],
                     "周期(第十周)":feishu_data["fields"]["周期(第十周)"]['value'][0]["text"],
+                    "周期(第十一周)":feishu_data["fields"]["周期(第十一周)"]['value'][0]["text"],
+                    "周期(第十二周)":feishu_data["fields"]["周期(第十二周)"]['value'][0]["text"],
                     "实际到货量(第一周)":data_sj_1,
                     "实际到货量(第二周)":data_sj_2,
                     "实际到货量(第三周)":data_sj_3,
@@ -148,6 +162,8 @@ class cg_orderPurchase:
                     "实际到货量(第八周)":data_sj_8,
                     "实际到货量(第九周)":data_sj_9,
                     "实际到货量(第十周)":data_sj_10,
+                    "实际到货量(第十一周)":data_sj_11,
+                    "实际到货量(第十二周)":data_sj_12,
                     "到货量":feishu_data["fields"]["到货量"],
                     "SKU":feishu_data["fields"]["SKU"][0]["text"],
                     "采购单号":feishu_data["fields"]["采购单号"][0]["text"]

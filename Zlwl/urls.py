@@ -23,4 +23,5 @@ urlpatterns = [
     path('TargetPerformance/', include('TargetPerformance.urls')),
     path('PMC/', include('PMC.urls')),
     path('tiktok/', include('tiktok.urls')),
+    path('Walmart/', include('Walmart.urls')),
 ]

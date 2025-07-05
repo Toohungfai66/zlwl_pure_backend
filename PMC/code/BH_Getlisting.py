@@ -115,9 +115,10 @@ class getlisting:
                     "标题":_data["item_name"],
                     "分类":_data["category_text"],
                     "FBA可售":_data["afn_fulfillable_quantity"],
-                    "FBA调拨":_data["reserved_fc_transfers"],
+                    "FBA调拨":_data["reserved_fc_transfers"], # 仅取待调仓，因为调仓中存在退货或者不可售的(因素较多)
                     "FBA在途":_data["afn_inbound_shipped_quantity"],
-                    "FBA计划入库":_data["afn_inbound_working_quantity"]
+                    "FBA计划入库":_data["afn_inbound_working_quantity"],
+                    "成交价":float(_data["listing_price"])
                 }
                 BH_pay_dict.update(pay_dict)
                 BH_insert_data_list.append({"fields": BH_pay_dict})
@@ -125,7 +126,7 @@ class getlisting:
                 if _data["status"] == 1 and realname != "非财务数据":
                     CW_pay_dict = {
                         "Listing状态":_data["status_text"],
-                        "目前在售价(原币)":float(_data["regular_price"]),
+                        "目前在售价(原币)":float(_data["listing_price"]),
                         "币种":_data["currency_symbol"],
                         "最近一周广告费(金额)":float(_data["seven_spend"])
                     }

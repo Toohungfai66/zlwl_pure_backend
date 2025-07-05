@@ -59,6 +59,8 @@ class wfs:
     def main(self):
         cookies = unquote(self.result_cookie)
         LingxingFBAResult = lingxingrpa(cookies=cookies).__getWFSKCdata__()
+        self.driver.close()
+        self.driver.quit()
         FeishuFBAReult = self.FEISHU_FBA_DICT()
         insert_data_list = []
         update_data_list = []

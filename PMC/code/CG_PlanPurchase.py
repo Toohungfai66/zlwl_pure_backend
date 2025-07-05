@@ -119,4 +119,4 @@ class cg_planpurchase:
         if len(delete_data_list) != 0:
             for _data in [delete_data_list[i:i + 500] for i in range(0, len(delete_data_list), 500)]:
                 payload_dict = {"records":_data}
-                print(feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tbleZ1v87gYaCB7G', payload_dict = payload_dict))
+                print(feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblMT8KYNHF28z5Z', payload_dict = payload_dict))

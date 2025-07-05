@@ -78,8 +78,8 @@ class ai_modeldatarequests_bh:
 
     def main(self):
         last_sunday, this_saturday = self.get_last_sunday_and_this_saturday()
-        last_sunday = "2025-05-31"
-        this_saturday = "2025-06-07"
+        last_sunday = "2025-06-08"
+        this_saturday = "2025-06-14"
         # 遍历get_data数据，拼接路径+key+xlsx进行读取，然后录入。读取失败的跳过
         all_data = self.get_data(start_data=last_sunday,end_data=this_saturday)
         for _data in all_data:
