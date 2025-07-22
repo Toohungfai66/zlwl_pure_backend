@@ -65,8 +65,12 @@ class lingxingrpa:
                     store = ""
                 else:
                     store = data["store_name_list"][0]
+                if "&&&" in str(data["product_name"]):
+                    product_name = str(data["product_name"])
+                else:
+                    product_name = str(data["product_name"]).split("&")[0]
                 result_dict[key_num] = {
-                    "product_name":str(data["product_name"]).split("&")[0],
+                    "product_name":product_name,
                     "wh_name":data["wh_name"],
                     "yj_one":int(data["section1"]),
                     "yj_two":int(data["section2"]),

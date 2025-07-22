@@ -209,10 +209,10 @@ class cg_orderPurchase:
         LX_data = []
         for _data in response_lx_planpurchase:
             # 排除RT与SX供应商之外的其他供应商
-            if "RT" not in _data["supplier_name"] and "SX" not in _data["supplier_name"]:
-                continue
+            # if "RT" not in _data["supplier_name"] and "SX" not in _data["supplier_name"]:
+            #     continue
             for _data_1 in range(len(_data["item_list"])):
-                # 去除待带货为0的数据
+                # 去除待到货为0的数据
                 if _data["item_list"][_data_1]["quantity_receive"] == 0:
                     continue
                 # 排除品名包含辅料的数据
@@ -327,16 +327,16 @@ class cg_orderPurchase:
             # 以500为划分，更新回飞书表格，正常的更新
             for _data in [insert_data_list[i:i + 500] for i in range(0, len(insert_data_list), 500)]:
                 payload_dict = {"records":_data}
-                feishuapi().__insertBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblsiC3jAdIqbbfG', payload_dict = payload_dict)
+                print(feishuapi().__insertBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblsiC3jAdIqbbfG', payload_dict = payload_dict))
         if len(update_data_list) != 0:
             # 以500为划分，更新回飞书表格，正常的更新
             for _data in [update_data_list[i:i + 500] for i in range(0, len(update_data_list), 500)]:
                 payload_dict = {"records":_data}
-                feishuapi().__postUpdatesDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblsiC3jAdIqbbfG', payload_dict = payload_dict)
+                print(feishuapi().__postUpdatesDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblsiC3jAdIqbbfG', payload_dict = payload_dict))
         if len(delete_data_list) != 0:
             for _data in [delete_data_list[i:i + 500] for i in range(0, len(delete_data_list), 500)]:
                 payload_dict = {"records":_data}
-                feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblsiC3jAdIqbbfG', payload_dict = payload_dict)
+                print(feishuapi().__deleteBitableDatas__(app_token = 'TxmobrecbaIyblsh9p8cv3k6n3f', table_id = 'tblsiC3jAdIqbbfG', payload_dict = payload_dict))
     
         FeishuReult = self.FEISHU_FBA_DICT(project_name = "two")
         # 计算昨天的日期

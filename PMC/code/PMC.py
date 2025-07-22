@@ -16,6 +16,7 @@ from .CG_AIpredit import cg_aipredit
 from .CG_Supplier import cg_supplier
 from .Cost_based_pricing import cost_based_pricing
 from .Temu_Warehouse import Wdtwarehouse
+from .CW_AasinPrice import cw_asinprice
 import json
 class pmc:
     def __init__(self):
@@ -34,15 +35,15 @@ class pmc:
             if _data == "亚马逊PMC采购计划":
                 self.record_id = self.data[_data]
         feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = {"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行中"}}]})
-        # try:
-        cg_planpurchase().main()
-        cg_supplierlayout().main()
-        cg_orderPurchase().main()
-        cg_supplier().main()
-        cg_aipredit().main()
-        self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
-        # except:
-        #     self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})
+        try:
+            cg_planpurchase().main()
+            cg_supplierlayout().main()
+            cg_orderPurchase().main()
+            cg_supplier().main()
+            cg_aipredit().main()
+            self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
+        except:
+            self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})
         feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = self.payload_dict)
 
     def __CG_orderPurchase__(self):
@@ -65,6 +66,7 @@ class pmc:
         try:
             getlisting().main(project = "cw")
             cost_based_pricing().main()
+            cw_asinprice().main()
             self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
         except:
             self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})
@@ -75,11 +77,11 @@ class pmc:
             if _data == "亚马逊周会数据":
                 self.record_id = self.data[_data]
         feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = {"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行中"}}]})
-        # try:
-        bh_productperformance().main()
-        self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
-        # except:
-        #     self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})
+        try:
+            bh_productperformance().main()
+            self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
+        except:
+            self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})
         feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = self.payload_dict)
         
     def __BHdata__(self):
@@ -117,11 +119,11 @@ class pmc:
             if _data == "领星库存明细":
                 self.record_id = self.data[_data]
         feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = {"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行中"}}]})
-        # try:
-        warehouse().main()
-        self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
-        # except:
-        #     self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})
+        try:
+            warehouse().main()
+            self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行成功"}}]})
+        except:
+            self.payload_dict.update({"records":[{"record_id":self.record_id,"fields":{"程序运行状态":"程序运行失败"}}]})
         feishuapi().__postUpdatesDatas__(app_token = self.app_token, table_id = self.table_id, payload_dict = self.payload_dict)
 
     def __Wdtkcdata__(self):
